@@ -75,9 +75,10 @@ const statsObserver = new IntersectionObserver((entries) => {
 statNumbers.forEach(el => statsObserver.observe(el));
 
 // ========================================
-// Prayer Times
+// Prayer Times (Diyanet İşleri Başkanlığı)
 // ========================================
-const prayerMap = {
+const prayerKeys = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+const prayerEls = {
   Fajr: 'timeFajr',
   Sunrise: 'timeSunrise',
   Dhuhr: 'timeDhuhr',
@@ -88,34 +89,84 @@ const prayerMap = {
 
 let currentTimes = {};
 
-// Set today's date
+// Set today's date in Turkish
 const dateEl = document.getElementById('prayerDate');
 const today = new Date();
 dateEl.textContent = today.toLocaleDateString('tr-TR', {
   weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
 });
 
-// Show loading state
+// Loading shimmer
 function setLoading(on) {
   document.querySelectorAll('.prayer-card').forEach(c => {
     c.classList.toggle('loading', on);
   });
 }
 
-// Fetch prayer times from Aladhan API
-async function fetchPrayerTimes(lat, lng) {
+// Fetch prayer times from Diyanet via CORS proxy
+async function fetchPrayerTimes(cityId, slug) {
   setLoading(true);
+  const diyanetUrl = `https://namazvakitleri.diyanet.gov.tr/tr-TR/${cityId}/${slug}-icin-namaz-vakti`;
+  const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(diyanetUrl)}`;
+
+  try {
+    const res = await fetch(proxyUrl);
+    const html = await res.text();
+
+    // Parse embedded JS variables from the Diyanet page
+    const extract = (varName) => {
+      const match = html.match(new RegExp(`var\\s+${varName}\\s*=\\s*"([^"]+)"`));
+      return match ? match[1] : null;
+    };
+
+    const times = {
+      Fajr:    extract('_imsakTime'),
+      Sunrise: extract('_gunesTime'),
+      Dhuhr:   extract('_ogleTime'),
+      Asr:     extract('_ikindiTime'),
+      Maghrib: extract('_aksamTime'),
+      Isha:    extract('_yatsiTime')
+    };
+
+    currentTimes = {};
+    for (const key of prayerKeys) {
+      const time = times[key] || '--:--';
+      document.getElementById(prayerEls[key]).textContent = time;
+      currentTimes[key] = time;
+    }
+
+    setLoading(false);
+    highlightPrayers();
+  } catch {
+    // Fallback: try Aladhan API with Diyanet method
+    fetchFallback(cityId, slug);
+  }
+}
+
+// Fallback to Aladhan API if Diyanet fetch fails
+async function fetchFallback(cityId, slug) {
+  // City coordinates for fallback
+  const coords = {
+    11898: [50.9654, 5.5022], 11915: [50.8476, 4.3572],
+    11914: [51.2194, 4.4025], 11916: [51.0543, 3.7174],
+    11917: [50.6326, 5.5797], 11895: [50.4108, 4.4446],
+    11891: [51.2093, 3.2247], 11889: [50.4669, 4.8675],
+    11899: [50.9307, 5.3375], 11706: [50.8798, 4.7005]
+  };
+  const [lat, lng] = coords[cityId] || [50.9654, 5.5022];
+
   try {
     const d = today;
-    const url = `https://api.aladhan.com/v1/timings/${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}?latitude=${lat}&longitude=${lng}&method=13&school=0`;
+    const url = `https://api.aladhan.com/v1/timings/${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}?latitude=${lat}&longitude=${lng}&method=13`;
     const res = await fetch(url);
     const data = await res.json();
     const timings = data.data.timings;
 
     currentTimes = {};
-    for (const [key, elId] of Object.entries(prayerMap)) {
-      const time = timings[key].replace(/\s*\(.*\)/, '');
-      document.getElementById(elId).textContent = time;
+    const aladhanMap = { Fajr:'Fajr', Sunrise:'Sunrise', Dhuhr:'Dhuhr', Asr:'Asr', Maghrib:'Maghrib', Isha:'Isha' };
+    for (const key of prayerKeys) {
+      const time = timings[aladhanMap[key]].replace(/\s*\(.*\)/, '');
+      document.getElementById(prayerEls[key]).textContent = time;
       currentTimes[key] = time;
     }
 
@@ -123,78 +174,67 @@ async function fetchPrayerTimes(lat, lng) {
     highlightPrayers();
   } catch {
     setLoading(false);
-    for (const elId of Object.values(prayerMap)) {
-      document.getElementById(elId).textContent = '--:--';
+    for (const key of prayerKeys) {
+      document.getElementById(prayerEls[key]).textContent = '--:--';
     }
   }
 }
 
 // Highlight next prayer, dim passed ones
 function highlightPrayers() {
-  const now = today.getHours() * 60 + today.getMinutes();
-  const cards = document.querySelectorAll('.prayer-card');
-  let nextFound = false;
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
 
-  cards.forEach(card => {
-    card.classList.remove('is-next', 'is-passed');
+  document.querySelectorAll('.prayer-card').forEach(c => {
+    c.classList.remove('is-next', 'is-passed');
   });
 
-  const prayers = Object.keys(prayerMap);
-  for (let i = 0; i < prayers.length; i++) {
-    const timeStr = currentTimes[prayers[i]];
-    if (!timeStr) continue;
+  let nextFound = false;
+  for (const key of prayerKeys) {
+    const timeStr = currentTimes[key];
+    if (!timeStr || timeStr === '--:--') continue;
     const [h, m] = timeStr.split(':').map(Number);
     const mins = h * 60 + m;
-    const card = document.querySelector(`[data-prayer="${prayers[i]}"]`);
+    const card = document.querySelector(`[data-prayer="${key}"]`);
     if (!card) continue;
 
-    if (mins > now && !nextFound) {
+    if (mins > nowMins && !nextFound) {
       card.classList.add('is-next');
       nextFound = true;
-    } else if (mins <= now) {
+    } else if (mins <= nowMins) {
       card.classList.add('is-passed');
     }
   }
 }
 
-// Countdown timer to next prayer
+// Countdown to next prayer
 function updateCountdown() {
   const now = new Date();
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-  const nowSecs = nowMins * 60 + now.getSeconds();
+  const nowSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 
-  let nextPrayerSecs = null;
-  const prayers = Object.keys(prayerMap);
-  for (const p of prayers) {
-    const timeStr = currentTimes[p];
-    if (!timeStr) continue;
-    const [h, m] = timeStr.split(':').map(Number);
-    const pSecs = h * 3600 + m * 60;
-    if (pSecs > nowSecs) {
-      nextPrayerSecs = pSecs;
-      break;
-    }
+  let nextSecs = null;
+  for (const key of prayerKeys) {
+    const t = currentTimes[key];
+    if (!t || t === '--:--') continue;
+    const [h, m] = t.split(':').map(Number);
+    const s = h * 3600 + m * 60;
+    if (s > nowSecs) { nextSecs = s; break; }
   }
 
   const el = document.getElementById('countdownTime');
-  if (nextPrayerSecs === null) {
-    // All prayers passed — show time until Fajr tomorrow (approximate)
-    el.textContent = '--:--:--';
-    return;
-  }
+  if (nextSecs === null) { el.textContent = '--:--:--'; return; }
 
-  let diff = nextPrayerSecs - nowSecs;
-  const hours = Math.floor(diff / 3600);
-  diff %= 3600;
+  let diff = nextSecs - nowSecs;
+  const hrs = Math.floor(diff / 3600); diff %= 3600;
   const mins = Math.floor(diff / 60);
   const secs = diff % 60;
   el.textContent =
-    String(hours).padStart(2, '0') + ':' +
+    String(hrs).padStart(2, '0') + ':' +
     String(mins).padStart(2, '0') + ':' +
     String(secs).padStart(2, '0');
 }
 
-setInterval(updateCountdown, 1000);
+setInterval(() => { updateCountdown(); }, 1000);
 
 // City switcher
 document.getElementById('citySwitcher').addEventListener('click', (e) => {
@@ -204,10 +244,8 @@ document.getElementById('citySwitcher').addEventListener('click', (e) => {
   document.querySelectorAll('.city-pill').forEach(p => p.classList.remove('active'));
   pill.classList.add('active');
 
-  const lat = pill.dataset.lat;
-  const lng = pill.dataset.lng;
-  fetchPrayerTimes(lat, lng);
+  fetchPrayerTimes(pill.dataset.id, pill.dataset.slug);
 });
 
 // Initial load — Genk
-fetchPrayerTimes(50.9654, 5.5022);
+fetchPrayerTimes('11898', 'genk');
