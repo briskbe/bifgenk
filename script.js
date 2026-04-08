@@ -101,7 +101,7 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15 });
 
-document.querySelectorAll('.sohbet-image-col, .sohbet-text-col').forEach(el => {
+document.querySelectorAll('.sohbet-image-col, .sohbet-text-col, .ev-text-col, .ev-image-col').forEach(el => {
   revealObserver.observe(el);
 });
 
