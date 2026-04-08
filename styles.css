@@ -550,7 +550,8 @@ button {
 }
 
 .announcement {
-  background: #e6f4ec;
+  position: relative;
+  background: linear-gradient(135deg, #f0faf4 0%, #e6f4ec 30%, #f0f7ff 70%, #f0faf4 100%);
   border-radius: 14px;
   padding: 18px 32px;
   display: flex;
@@ -559,6 +560,65 @@ button {
   gap: 12px;
   font-size: 0.95rem;
   color: var(--color-text);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Animated glowing border */
+.announcement::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 1.5px;
+  background: linear-gradient(
+    var(--glow-angle, 0deg),
+    transparent 0%,
+    transparent 30%,
+    rgba(16, 155, 74, 0.5) 45%,
+    rgba(16, 155, 74, 0.8) 50%,
+    rgba(16, 155, 74, 0.5) 55%,
+    transparent 70%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: glowRotate 4s linear infinite;
+  z-index: -1;
+}
+
+/* Soft outer glow that follows the border */
+.announcement::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 15px;
+  background: linear-gradient(
+    var(--glow-angle, 0deg),
+    transparent 0%,
+    transparent 35%,
+    rgba(16, 155, 74, 0.08) 48%,
+    rgba(16, 155, 74, 0.12) 50%,
+    rgba(16, 155, 74, 0.08) 52%,
+    transparent 65%,
+    transparent 100%
+  );
+  animation: glowRotate 4s linear infinite;
+  filter: blur(8px);
+  z-index: -2;
+}
+
+@keyframes glowRotate {
+  0% { --glow-angle: 0deg; }
+  100% { --glow-angle: 360deg; }
+}
+
+@property --glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
 
 .announcement strong {
