@@ -54,7 +54,7 @@ function animateNumber(el) {
     const progress = Math.min(elapsed / duration, 1);
     // Ease-out cubic for a satisfying deceleration
     const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(eased * target).toLocaleString();
+    el.textContent = Math.round(eased * target);
     if (progress < 1) requestAnimationFrame(tick);
   }
 

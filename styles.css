@@ -477,104 +477,50 @@ button {
 .hero-stats {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 24px;
   margin-bottom: 36px;
   animation: fadeInUp 0.6s ease 0.3s both;
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 6px;
 }
 
-.stat-card {
-  position: relative;
+.stat-item {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 20px;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: background 0.3s ease;
-  flex: 1;
-}
-
-.stat-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.stat-card:hover .stat-glow {
-  opacity: 1;
-}
-
-.stat-card:hover .stat-icon {
-  transform: scale(1.1);
-  background: var(--color-primary);
-  box-shadow: 0 0 20px rgba(16, 155, 74, 0.5);
-}
-
-.stat-glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 50%, rgba(16, 155, 74, 0.12), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.stat-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  background: rgba(16, 155, 74, 0.2);
-  border-radius: 11px;
-  color: var(--color-primary-light);
-  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-}
-
-.stat-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.stat-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
+  align-items: baseline;
+  gap: 6px;
 }
 
 .stat-number {
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: white;
-  line-height: 1.2;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
-.stat-number-text {
-  font-size: 1.05rem;
+.stat-text {
+  font-size: 1.1rem;
   font-weight: 800;
   color: white;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .stat-label {
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.55);
-  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.stat-divider {
-  width: 1px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.1);
+.stat-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-primary);
   flex-shrink: 0;
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
 }
 
 /* Feature bullets at bottom of hero */
@@ -730,6 +676,7 @@ button {
   }
 
   .hero-stats {
+    gap: 16px;
     flex-wrap: wrap;
   }
 }
@@ -807,18 +754,8 @@ button {
   }
 
   .hero-stats {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .stat-divider {
-    width: 80%;
-    height: 1px;
-    align-self: center;
-  }
-
-  .stat-card {
-    padding: 12px 16px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .hero-features {
