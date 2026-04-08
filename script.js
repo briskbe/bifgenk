@@ -42,3 +42,34 @@ window.addEventListener('resize', () => {
     navMenu.classList.remove('open');
   }
 });
+
+// Animated number counter
+function animateNumber(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const duration = 2000;
+  const start = performance.now();
+
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease-out cubic for a satisfying deceleration
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target).toLocaleString();
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+// Trigger counters when stats scroll into view
+const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateNumber(entry.target);
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+statNumbers.forEach(el => statsObserver.observe(el));
