@@ -91,6 +91,20 @@ const statsObserver = new IntersectionObserver((entries) => {
 
 statNumbers.forEach(el => statsObserver.observe(el));
 
+// Scroll reveal for sections
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.sohbet-image-col, .sohbet-text-col').forEach(el => {
+  revealObserver.observe(el);
+});
+
 // ========================================
 // Prayer Times (Diyanet İşleri Başkanlığı)
 // ========================================
