@@ -14,7 +14,7 @@
   <header class="navbar" id="navbar">
     <div class="nav-container">
       <a href="/" class="nav-logo">
-        <span class="logo-mark">B</span>
+        <span class="logo-mark">BG</span>
         <span class="logo-text">BifGenk</span>
       </a>
 
@@ -83,14 +83,49 @@
           </div>
         </div>
 
+        <div class="nav-item has-dropdown">
+          <button class="nav-link dropdown-toggle">
+            About Us
+            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">💡</span>
+              <div>
+                <strong>Our Story</strong>
+                <p>Learn about our mission</p>
+              </div>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">👥</span>
+              <div>
+                <strong>Team</strong>
+                <p>Meet the people behind it</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
         <a href="#" class="nav-link">Pricing</a>
-        <a href="#" class="nav-link">About Us</a>
-        <a href="#" class="nav-link">Blog</a>
       </nav>
 
       <div class="nav-actions">
-        <a href="#" class="btn-login">Sign In</a>
-        <a href="#" class="btn-cta">Get Started</a>
+        <a href="#" class="btn-login">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="8" cy="5.5" r="3"/>
+            <path d="M2.5 14c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke-linecap="round"/>
+          </svg>
+          MyAccount
+        </a>
+        <a href="#" class="btn-cta">Book a Demo</a>
+        <div class="lang-toggle">
+          EN
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2.5 3.75L5 6.25L7.5 3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
 
       <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
@@ -102,129 +137,110 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-bg">
-      <div class="hero-gradient"></div>
-      <div class="hero-pattern"></div>
-    </div>
-
-    <div class="hero-container">
+  <section class="hero-wrapper">
+    <div class="hero">
+      <div class="hero-overlay"></div>
       <div class="hero-content">
-        <div class="hero-badge">
-          <span class="badge-dot"></span>
-          New — Introducing AI-powered workflows
-        </div>
-
         <h1 class="hero-title">
-          Build something <br>
-          <span class="title-highlight">extraordinary</span> today.
+          Platform solutions for modern businesses. Faster, smarter and all-inclusive.
         </h1>
 
         <p class="hero-subtitle">
-          The all-in-one platform that helps teams move faster, collaborate
-          better, and deliver exceptional results. No complexity, no compromises.
+          Simple and powerful, ideal for startups and growing companies.
         </p>
 
-        <div class="hero-actions">
-          <a href="#" class="btn-primary">
-            Start Free Trial
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-          <a href="#" class="btn-secondary">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M6.5 5.5L11 8L6.5 10.5V5.5Z" fill="currentColor"/>
-            </svg>
-            Watch Demo
-          </a>
-        </div>
+        <a href="#" class="btn-primary">
+          Explore our solutions
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
 
         <div class="hero-trust">
-          <div class="trust-stars">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="#facc15"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="#facc15"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="#facc15"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="#facc15"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="#facc15"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
-            <span>4.9/5</span>
+          <div class="trust-badge">
+            <span class="trust-badge-icon">★</span>
+            <div class="trust-badge-text">
+              <strong>Scale-up of the Year</strong>
+              <span>Award Winner 2025</span>
+            </div>
           </div>
-          <span class="trust-separator">|</span>
-          <span class="trust-text">Trusted by 2,500+ companies worldwide</span>
+          <div class="trust-divider"></div>
+          <div class="trust-rating">
+            <span class="trust-label">Excellent</span>
+            <span class="trust-score">4.5 out of 5</span>
+            <div class="trust-stars">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="#00b67a"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="#00b67a"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="#00b67a"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="#00b67a"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="#dcdce6"><path d="M8 1l2.245 4.55 5.02.73-3.633 3.54.858 5L8 12.585 3.51 15.82l.858-5L.735 7.28l5.02-.73z"/></svg>
+              <span class="trust-provider">Trustpilot</span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="hero-visual">
-        <div class="hero-card">
-          <div class="card-header">
-            <div class="card-dots">
-              <span></span><span></span><span></span>
-            </div>
-            <span class="card-title">Dashboard</span>
+        <div class="hero-features">
+          <div class="hero-feature">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 1l2.47 5.006 5.523.803-3.997 3.896.943 5.5L9 13.512l-4.939 2.694.943-5.5L1.007 6.81l5.523-.803z" stroke="white" stroke-width="1.2" fill="none"/>
+            </svg>
+            All costs included
           </div>
-          <div class="card-body">
-            <div class="card-stat">
-              <span class="stat-label">Revenue</span>
-              <span class="stat-value">$48,290</span>
-              <span class="stat-change positive">+24.5%</span>
-            </div>
-            <div class="card-chart">
-              <div class="chart-bar" style="height: 40%"></div>
-              <div class="chart-bar" style="height: 65%"></div>
-              <div class="chart-bar" style="height: 45%"></div>
-              <div class="chart-bar" style="height: 80%"></div>
-              <div class="chart-bar" style="height: 55%"></div>
-              <div class="chart-bar" style="height: 90%"></div>
-              <div class="chart-bar active" style="height: 95%"></div>
-            </div>
-            <div class="card-metrics">
-              <div class="metric">
-                <span class="metric-dot blue"></span>
-                <span>Users</span>
-                <strong>12,489</strong>
-              </div>
-              <div class="metric">
-                <span class="metric-dot green"></span>
-                <span>Sessions</span>
-                <strong>28,102</strong>
-              </div>
-              <div class="metric">
-                <span class="metric-dot purple"></span>
-                <span>Conversion</span>
-                <strong>3.24%</strong>
-              </div>
-            </div>
+          <div class="hero-feature">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M13.5 3.75L7.5 14.25l-3-3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Up to 20% more affordable
+          </div>
+          <div class="hero-feature">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.2"/>
+              <path d="M9 5v4l2.5 2.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            Personal follow-up
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Scrolling logo bar -->
-    <div class="logo-bar">
-      <div class="logo-bar-label">Trusted by industry leaders</div>
-      <div class="logo-slider">
-        <div class="logo-track">
-          <span class="client-logo">Acme Corp</span>
-          <span class="client-logo">TechFlow</span>
-          <span class="client-logo">NovaStar</span>
-          <span class="client-logo">BlueShift</span>
-          <span class="client-logo">Quantum</span>
-          <span class="client-logo">Vertex AI</span>
-          <span class="client-logo">Meridian</span>
-          <span class="client-logo">Catalyst</span>
-          <!-- Duplicate for seamless loop -->
-          <span class="client-logo">Acme Corp</span>
-          <span class="client-logo">TechFlow</span>
-          <span class="client-logo">NovaStar</span>
-          <span class="client-logo">BlueShift</span>
-          <span class="client-logo">Quantum</span>
-          <span class="client-logo">Vertex AI</span>
-          <span class="client-logo">Meridian</span>
-          <span class="client-logo">Catalyst</span>
-        </div>
+  <!-- Announcement Banner -->
+  <section class="announcement-wrapper">
+    <div class="announcement">
+      <strong>No long commitments: our contracts start from just 12 months.</strong>
+      <a href="#">
+        Discover BifGenk
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7H11M11 7L7.5 3.5M11 7L7.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Logo Slider -->
+  <section class="logo-section">
+    <div class="logo-slider">
+      <div class="logo-track">
+        <span class="client-logo">Acme Corp</span>
+        <span class="client-logo">smartphoto</span>
+        <span class="client-logo">payflip</span>
+        <span class="client-logo">ELINDUS</span>
+        <span class="client-logo">COMATE</span>
+        <span class="client-logo">darta</span>
+        <span class="client-logo">TechFlow</span>
+        <span class="client-logo">NovaStar</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="client-logo">Acme Corp</span>
+        <span class="client-logo">smartphoto</span>
+        <span class="client-logo">payflip</span>
+        <span class="client-logo">ELINDUS</span>
+        <span class="client-logo">COMATE</span>
+        <span class="client-logo">darta</span>
+        <span class="client-logo">TechFlow</span>
+        <span class="client-logo">NovaStar</span>
       </div>
     </div>
+    <p class="logo-section-text">Already more than 5000 clients trust us</p>
   </section>
 
   <script src="script.js"></script>
