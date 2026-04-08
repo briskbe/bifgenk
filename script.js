@@ -5,42 +5,59 @@ window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 10);
 });
 
-// Mobile menu toggle
+// Mobile drawer
 const mobileToggle = document.getElementById('mobileToggle');
-const navMenu = document.getElementById('navMenu');
+const mobileDrawer = document.getElementById('mobileDrawer');
+const mobileOverlay = document.getElementById('mobileOverlay');
+const mobileClose = document.getElementById('mobileClose');
 
-mobileToggle.addEventListener('click', () => {
-  mobileToggle.classList.toggle('active');
-  navMenu.classList.toggle('open');
-});
+function openDrawer() {
+  mobileToggle.classList.add('active');
+  mobileDrawer.classList.add('open');
+  mobileOverlay.classList.add('open');
+  document.body.classList.add('drawer-open');
+}
 
-// Dropdown toggles (for mobile)
-document.querySelectorAll('.has-dropdown .dropdown-toggle').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    if (window.innerWidth > 768) return;
-    e.preventDefault();
-    const item = btn.closest('.nav-item');
-    const wasActive = item.classList.contains('active');
-    document.querySelectorAll('.nav-item.active').forEach(el => el.classList.remove('active'));
-    if (!wasActive) item.classList.add('active');
+function closeDrawer() {
+  mobileToggle.classList.remove('active');
+  mobileDrawer.classList.remove('open');
+  mobileOverlay.classList.remove('open');
+  document.body.classList.remove('drawer-open');
+}
+
+mobileToggle.addEventListener('click', openDrawer);
+mobileClose.addEventListener('click', closeDrawer);
+mobileOverlay.addEventListener('click', closeDrawer);
+
+// Mobile accordion
+document.querySelectorAll('.mobile-nav-heading').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const group = btn.closest('.mobile-nav-group');
+    const sub = group.querySelector('.mobile-nav-sub');
+    const wasExpanded = btn.classList.contains('expanded');
+
+    // Close all
+    document.querySelectorAll('.mobile-nav-heading.expanded').forEach(b => b.classList.remove('expanded'));
+    document.querySelectorAll('.mobile-nav-sub.open').forEach(s => s.classList.remove('open'));
+
+    if (!wasExpanded) {
+      btn.classList.add('expanded');
+      sub.classList.add('open');
+    }
   });
 });
 
-// Close mobile menu on outside click
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.navbar')) {
-    mobileToggle.classList.remove('active');
-    navMenu.classList.remove('open');
-    document.querySelectorAll('.nav-item.active').forEach(el => el.classList.remove('active'));
-  }
+// Mobile language switcher
+document.querySelectorAll('.mobile-lang').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mobile-lang').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
 });
 
-// Close mobile menu on resize
+// Close drawer on resize to desktop
 window.addEventListener('resize', () => {
-  if (window.innerWidth > 768) {
-    mobileToggle.classList.remove('active');
-    navMenu.classList.remove('open');
-  }
+  if (window.innerWidth > 768) closeDrawer();
 });
 
 // Animated number counter
