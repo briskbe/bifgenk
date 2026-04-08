@@ -1483,6 +1483,61 @@ button {
   transform: translateY(-2px);
 }
 
+/* Image card — compact banner */
+.aktivite-card-image {
+  padding: 0;
+  height: 200px;
+  border-radius: 14px;
+}
+
+.aktivite-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 14px;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.aktivite-card-image:hover .aktivite-card-img {
+  transform: scale(1.04);
+}
+
+.aktivite-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.75) 100%);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.aktivite-card-content {
+  position: absolute;
+  bottom: 20px;
+  left: 22px;
+  z-index: 1;
+}
+
+.aktivite-card-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 100px;
+  margin-bottom: 8px;
+}
+
+.aktivite-card-content h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: white;
+}
+
 /* Activity item cards — compact horizontal */
 .aktivite-card-item {
   background: rgba(255, 255, 255, 0.03);
@@ -2114,6 +2169,10 @@ body.drawer-open {
 
   .aktivite-section {
     padding: 56px 0;
+  }
+
+  .aktivite-card-image {
+    height: 160px;
   }
 
   .aktivite-card-item {
