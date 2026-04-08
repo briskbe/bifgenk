@@ -251,30 +251,116 @@
     </div>
   </section>
 
-  <!-- Logo Slider -->
-  <section class="logo-section">
-    <div class="logo-slider">
-      <div class="logo-track">
-        <span class="client-logo">Acme Corp</span>
-        <span class="client-logo">smartphoto</span>
-        <span class="client-logo">payflip</span>
-        <span class="client-logo">ELINDUS</span>
-        <span class="client-logo">COMATE</span>
-        <span class="client-logo">darta</span>
-        <span class="client-logo">TechFlow</span>
-        <span class="client-logo">NovaStar</span>
-        <!-- Duplicate for seamless loop -->
-        <span class="client-logo">Acme Corp</span>
-        <span class="client-logo">smartphoto</span>
-        <span class="client-logo">payflip</span>
-        <span class="client-logo">ELINDUS</span>
-        <span class="client-logo">COMATE</span>
-        <span class="client-logo">darta</span>
-        <span class="client-logo">TechFlow</span>
-        <span class="client-logo">NovaStar</span>
+  <!-- Prayer Times -->
+  <section class="prayer-section">
+    <div class="prayer-container">
+      <div class="prayer-header">
+        <div class="prayer-title-row">
+          <div class="prayer-icon-wrap">
+            <svg class="prayer-mosque" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 22h20"/>
+              <path d="M5 22v-8"/>
+              <path d="M19 22v-8"/>
+              <path d="M5 14c0-4 3.1-7 7-7s7 3 7 7"/>
+              <path d="M9 22v-4a3 3 0 0 1 6 0v4"/>
+              <path d="M12 7V3"/>
+              <circle cx="12" cy="2.5" r="0.5" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="prayer-title">Namaz Vakitleri</h2>
+            <p class="prayer-date" id="prayerDate"></p>
+          </div>
+        </div>
+        <div class="prayer-countdown" id="prayerCountdown">
+          <span class="countdown-label">Sonraki namaza</span>
+          <span class="countdown-time" id="countdownTime">--:--:--</span>
+        </div>
+      </div>
+
+      <div class="city-switcher" id="citySwitcher">
+        <button class="city-pill active" data-city="Genk" data-lat="50.9654" data-lng="5.5022">Genk</button>
+        <button class="city-pill" data-city="Brussels" data-lat="50.8476" data-lng="4.3572">Brüksel</button>
+        <button class="city-pill" data-city="Antwerp" data-lat="51.2194" data-lng="4.4025">Antwerp</button>
+        <button class="city-pill" data-city="Ghent" data-lat="51.0543" data-lng="3.7174">Gent</button>
+        <button class="city-pill" data-city="Liege" data-lat="50.6326" data-lng="5.5797">Liège</button>
+        <button class="city-pill" data-city="Charleroi" data-lat="50.4108" data-lng="4.4446">Charleroi</button>
+        <button class="city-pill" data-city="Bruges" data-lat="51.2093" data-lng="3.2247">Bruges</button>
+        <button class="city-pill" data-city="Namur" data-lat="50.4669" data-lng="4.8675">Namur</button>
+        <button class="city-pill" data-city="Hasselt" data-lat="50.9307" data-lng="5.3375">Hasselt</button>
+        <button class="city-pill" data-city="Leuven" data-lat="50.8798" data-lng="4.7005">Leuven</button>
+      </div>
+
+      <div class="prayer-grid" id="prayerGrid">
+        <div class="prayer-card" data-prayer="Fajr">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 7.66l-.71-.71M4.05 4.05l-.71-.71"/>
+              <path d="M16 12a4 4 0 0 0-8 0" stroke-width="1.5"/>
+              <line x1="4" y1="18" x2="20" y2="18" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="prayer-name">İmsak</span>
+          <span class="prayer-time" id="timeFajr">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Sunrise">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m17.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m14.14 0l-1.41-1.41M6.34 6.34L4.93 4.93"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Güneş</span>
+          <span class="prayer-time" id="timeSunrise">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Dhuhr">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 2v4m0 12v4m10-10h-4M6 12H2"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Öğle</span>
+          <span class="prayer-time" id="timeDhuhr">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Asr">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="10" cy="12" r="4"/>
+              <path d="M10 2v2m0 16v2m8-12h2M2 12h2m13.07-7.07l1.41 1.41M5.34 17.66l-1.41 1.41"/>
+              <line x1="4" y1="20" x2="20" y2="20" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="prayer-name">İkindi</span>
+          <span class="prayer-time" id="timeAsr">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Maghrib">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M17 12a5 5 0 0 0-10 0"/>
+              <line x1="12" y1="3" x2="12" y2="7"/>
+              <line x1="5.6" y1="5.6" x2="7.8" y2="7.8"/>
+              <line x1="18.4" y1="5.6" x2="16.2" y2="7.8"/>
+              <line x1="3" y1="16" x2="21" y2="16"/>
+              <line x1="5" y1="19" x2="19" y2="19"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Akşam</span>
+          <span class="prayer-time" id="timeMaghrib">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Isha">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+              <circle cx="15" cy="6" r="0.5" fill="currentColor" stroke="none"/>
+              <circle cx="18" cy="10" r="0.3" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Yatsı</span>
+          <span class="prayer-time" id="timeIsha">--:--</span>
+        </div>
       </div>
     </div>
-    <p class="logo-section-text">Destekçilerimiz ve iş birliği yaptığımız kurumlar</p>
   </section>
 
   <script src="script.js"></script>
