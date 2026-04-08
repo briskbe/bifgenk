@@ -1463,6 +1463,174 @@ button {
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* ========================================
+   Başkan Section
+   ======================================== */
+.baskan-section {
+  position: relative;
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f8faf9 0%, #eef5f0 50%, #f0f7f2 100%);
+  overflow: hidden;
+}
+
+.baskan-section::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(16, 155, 74, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.baskan-section::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -60px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(16, 155, 74, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.baskan-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 64px;
+}
+
+/* Photo */
+.baskan-photo-col {
+  display: flex;
+  justify-content: center;
+}
+
+.baskan-photo-wrapper {
+  position: relative;
+  width: 280px;
+  height: 280px;
+}
+
+.baskan-photo-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(16, 155, 74, 0.2);
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.5; }
+}
+
+.baskan-photo {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 4px solid white;
+}
+
+/* Text */
+.baskan-text-col {
+  max-width: 520px;
+}
+
+.baskan-eyebrow {
+  display: inline-block;
+  padding: 5px 14px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-primary);
+  background: rgba(16, 155, 74, 0.08);
+  border: 1px solid rgba(16, 155, 74, 0.2);
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.baskan-name {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.baskan-role {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+.baskan-quote {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+  padding-left: 20px;
+  border-left: 3px solid var(--color-primary);
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+.baskan-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.baskan-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s;
+}
+
+.baskan-stat:hover {
+  border-color: rgba(16, 155, 74, 0.2);
+  box-shadow: 0 4px 16px rgba(16, 155, 74, 0.1);
+  transform: translateY(-2px);
+}
+
+.baskan-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(16, 155, 74, 0.08);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.baskan-stat-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
 /* Cards — Vertical stack */
 .aktivite-cards {
   display: flex;
@@ -2035,6 +2203,37 @@ body.drawer-open {
     max-width: 100%;
   }
 
+  .baskan-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 40px;
+  }
+
+  .baskan-photo-wrapper {
+    width: 220px;
+    height: 220px;
+  }
+
+  .baskan-photo {
+    width: 220px;
+    height: 220px;
+  }
+
+  .baskan-text-col {
+    max-width: 100%;
+  }
+
+  .baskan-quote {
+    border-left: none;
+    padding-left: 0;
+    border-top: 3px solid var(--color-primary);
+    padding-top: 16px;
+  }
+
+  .baskan-stats {
+    justify-content: center;
+  }
+
   .aktivite-cards {
     max-width: 100%;
   }
@@ -2100,6 +2299,24 @@ body.drawer-open {
   .hero-features {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .baskan-section {
+    padding: 56px 0;
+  }
+
+  .baskan-photo-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+
+  .baskan-photo {
+    width: 200px;
+    height: 200px;
+  }
+
+  .baskan-stats {
+    flex-direction: column;
   }
 
   .prayer-container {
