@@ -1467,168 +1467,118 @@ button {
    Başkan Section
    ======================================== */
 .baskan-section {
-  position: relative;
   padding: 80px 0;
-  background: linear-gradient(135deg, #f8faf9 0%, #eef5f0 50%, #f0f7f2 100%);
-  overflow: hidden;
-}
-
-.baskan-section::before {
-  content: '';
-  position: absolute;
-  top: -120px;
-  right: -80px;
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(16, 155, 74, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.baskan-section::after {
-  content: '';
-  position: absolute;
-  bottom: -80px;
-  left: -60px;
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(16, 155, 74, 0.06) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
+  background: #f5f7f6;
 }
 
 .baskan-container {
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-padding);
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 64px;
-}
-
-/* Photo */
-.baskan-photo-col {
   display: flex;
   justify-content: center;
 }
 
-.baskan-photo-wrapper {
+.baskan-card {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  max-width: 680px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Photo side */
+.baskan-photo-col {
   position: relative;
-  width: 280px;
-  height: 280px;
-}
-
-.baskan-photo-ring {
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  border: 2px solid rgba(16, 155, 74, 0.2);
-  animation: ringPulse 3s ease-in-out infinite;
-}
-
-@keyframes ringPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.04); opacity: 0.5; }
+  overflow: hidden;
 }
 
 .baskan-photo {
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: top center;
   display: block;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.08);
-  border: 4px solid white;
 }
 
-/* Text */
-.baskan-text-col {
-  max-width: 520px;
+.baskan-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+}
+
+.baskan-photo-label {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 1;
 }
 
 .baskan-eyebrow {
   display: inline-block;
-  padding: 5px 14px;
-  font-size: 0.75rem;
-  font-weight: 800;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--color-primary);
-  background: rgba(16, 155, 74, 0.08);
-  border: 1px solid rgba(16, 155, 74, 0.2);
+  letter-spacing: 0.1em;
+  color: white;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
   border-radius: 100px;
-  margin-bottom: 16px;
+}
+
+/* Text side */
+.baskan-text-col {
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .baskan-name {
-  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--color-text);
-  line-height: 1.15;
-  margin-bottom: 6px;
+  line-height: 1.2;
+  margin-bottom: 4px;
 }
 
 .baskan-role {
-  font-size: 1.05rem;
-  font-weight: 500;
+  font-size: 0.88rem;
+  font-weight: 600;
   color: var(--color-primary);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .baskan-quote {
-  font-size: 1rem;
-  line-height: 1.75;
+  font-size: 0.9rem;
+  line-height: 1.7;
   color: var(--color-text-secondary);
-  padding-left: 20px;
+  padding-left: 16px;
   border-left: 3px solid var(--color-primary);
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   font-style: italic;
 }
 
-.baskan-stats {
+.baskan-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
 }
 
-.baskan-stat {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s;
-}
-
-.baskan-stat:hover {
-  border-color: rgba(16, 155, 74, 0.2);
-  box-shadow: 0 4px 16px rgba(16, 155, 74, 0.1);
-  transform: translateY(-2px);
-}
-
-.baskan-stat-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(16, 155, 74, 0.08);
-  color: var(--color-primary);
-  flex-shrink: 0;
-}
-
-.baskan-stat-text {
-  font-size: 0.85rem;
+.baskan-tag {
+  padding: 5px 12px;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-primary);
+  background: rgba(16, 155, 74, 0.07);
+  border-radius: 100px;
 }
 
 /* Cards — Vertical stack */
@@ -2203,34 +2153,26 @@ body.drawer-open {
     max-width: 100%;
   }
 
-  .baskan-container {
+  .baskan-card {
     grid-template-columns: 1fr;
-    text-align: center;
-    gap: 40px;
   }
 
-  .baskan-photo-wrapper {
-    width: 220px;
-    height: 220px;
-  }
-
-  .baskan-photo {
-    width: 220px;
-    height: 220px;
+  .baskan-photo-col {
+    height: 280px;
   }
 
   .baskan-text-col {
-    max-width: 100%;
+    text-align: center;
+    padding: 28px 24px;
   }
 
   .baskan-quote {
     border-left: none;
     padding-left: 0;
-    border-top: 3px solid var(--color-primary);
-    padding-top: 16px;
+    text-align: center;
   }
 
-  .baskan-stats {
+  .baskan-tags {
     justify-content: center;
   }
 
@@ -2305,18 +2247,12 @@ body.drawer-open {
     padding: 56px 0;
   }
 
-  .baskan-photo-wrapper {
-    width: 200px;
-    height: 200px;
+  .baskan-photo-col {
+    height: 240px;
   }
 
-  .baskan-photo {
-    width: 200px;
-    height: 200px;
-  }
-
-  .baskan-stats {
-    flex-direction: column;
+  .baskan-text-col {
+    padding: 24px 20px;
   }
 
   .prayer-container {
