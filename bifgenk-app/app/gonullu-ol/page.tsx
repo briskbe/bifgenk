@@ -338,7 +338,11 @@ export default function GonulluOlPage() {
           <h2>Gönüllü olmak ister misin?</h2>
           <p>Bilgilerini doldur, en kısa sürede seninle iletişime geçelim.</p>
         </div>
-        <form class="gonullu-form" action="#" method="POST">
+        <form class="gonullu-form" action="https://formsubmit.co/info@brisk.be" method="POST">
+          <input type="hidden" name="_subject" value="Yeni Gönüllü Başvurusu - BIF Genk"/>
+          <input type="hidden" name="_captcha" value="false"/>
+          <input type="hidden" name="_next" value="https://bifgenclikgenk.be/gonullu-ol?success=true"/>
+          <input type="text" name="_honey" style="display:none"/>
           <div class="gonullu-form-row">
             <div class="gonullu-form-group">
               <label for="gonullu-name">Ad Soyad *</label>
