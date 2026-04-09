@@ -1,0 +1,465 @@
+/* ===== İletişim Page Styles ===== */
+
+/* Hero — contained card matching homepage hero style */
+.iletisim-hero-wrapper {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 12px var(--container-padding) 0;
+}
+
+.iletisim-hero {
+  position: relative;
+  min-height: 340px;
+  border-radius: var(--hero-radius);
+  overflow: hidden;
+  background: url('hero-bg.jpg') center / cover no-repeat;
+  background-color: #1a2a1a;
+}
+
+/* Green gradient overlay on photo */
+.iletisim-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    rgba(4, 30, 15, 0.88) 0%,
+    rgba(8, 60, 30, 0.8) 35%,
+    rgba(16, 155, 74, 0.65) 65%,
+    rgba(16, 155, 74, 0.5) 100%
+  );
+  z-index: 1;
+}
+
+/* Shimmer sweep — same as homepage */
+.iletisim-hero-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(16, 155, 74, 0.08) 45%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(16, 155, 74, 0.08) 55%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+/* Glow pulse — same as homepage */
+.iletisim-hero-overlay::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 60%;
+  height: 70%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(16, 155, 74, 0.15) 0%,
+    transparent 70%
+  );
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+.iletisim-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 64px 56px 48px;
+  max-width: 640px;
+}
+
+.iletisim-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  padding: 6px 18px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.iletisim-hero-content h1 {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 16px;
+  animation: fadeInUp 0.6s ease both;
+  animation-delay: 0.1s;
+}
+
+.iletisim-hero-content p {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.65;
+  max-width: 480px;
+  margin: 0;
+  animation: fadeInUp 0.6s ease both;
+  animation-delay: 0.2s;
+}
+
+/* Use homepage's existing keyframes (shimmer, glowPulse, fadeInUp) */
+
+/* Main Content */
+.iletisim-main {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 64px var(--container-padding) 80px;
+}
+
+.iletisim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Contact Info */
+.iletisim-info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.iletisim-info-header h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.iletisim-info-header p {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Contact Cards */
+.iletisim-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.iletisim-card {
+  display: flex;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.iletisim-card:hover {
+  border-color: #a7f3d0;
+  box-shadow: 0 6px 24px rgba(16, 155, 74, 0.08);
+  transform: translateY(-2px);
+}
+
+.iletisim-card-icon {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: #ecfdf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  transition: transform 0.25s ease;
+}
+
+.iletisim-card:hover .iletisim-card-icon {
+  transform: scale(1.08);
+}
+
+.iletisim-card-icon-wa {
+  background: #dcfce7;
+  color: #25d366;
+}
+
+.iletisim-card-whatsapp {
+  border-color: #bbf7d0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+.iletisim-card-whatsapp:hover {
+  border-color: #86efac;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.1);
+}
+
+.iletisim-card-avatar {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform 0.25s ease;
+}
+
+.iletisim-card:hover .iletisim-card-avatar {
+  transform: scale(1.08);
+}
+
+.iletisim-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.iletisim-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.iletisim-card-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.iletisim-card-link {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.iletisim-card-link:hover {
+  color: var(--color-primary);
+}
+
+.iletisim-card-sub {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Routebeschrijving button */
+.iletisim-route-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 7px 16px;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.iletisim-route-btn:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 155, 74, 0.25);
+}
+
+/* WhatsApp button */
+.iletisim-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 7px 16px;
+  background: #25d366;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.iletisim-wa-btn:hover {
+  background: #20bd5a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+/* Map Section */
+.iletisim-map-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.iletisim-map-header h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.iletisim-map-header p {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.iletisim-map-container {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+
+.iletisim-map-container iframe {
+  display: block;
+  width: 100%;
+  height: 380px;
+}
+
+.iletisim-map-overlay {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  max-width: 260px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.iletisim-map-pin {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.iletisim-map-overlay strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.iletisim-map-overlay span {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* Quick Info Grid */
+.iletisim-quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.iletisim-quick-card {
+  padding: 18px;
+  border-radius: 14px;
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+}
+
+.iletisim-quick-card svg {
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.iletisim-quick-card h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 4px;
+}
+
+.iletisim-quick-card p {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 900px) {
+  .iletisim-hero-wrapper {
+    padding: 12px 20px 0;
+  }
+
+  .iletisim-hero {
+    min-height: 280px;
+  }
+
+  .iletisim-hero-content {
+    padding: 48px 36px 40px;
+  }
+
+  .iletisim-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .iletisim-main {
+    padding: 48px 20px 64px;
+  }
+}
+
+@media (max-width: 600px) {
+  .iletisim-hero-wrapper {
+    padding: 8px 12px 0;
+  }
+
+  .iletisim-hero {
+    min-height: 240px;
+    border-radius: 14px;
+  }
+
+  .iletisim-hero-content {
+    padding: 36px 24px 32px;
+  }
+
+  .iletisim-card {
+    padding: 18px;
+  }
+
+  .iletisim-map-container iframe {
+    height: 280px;
+  }
+
+  .iletisim-quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .iletisim-map-overlay {
+    max-width: none;
+  }
+}
