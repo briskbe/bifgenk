@@ -12,7 +12,7 @@
   min-height: 340px;
   border-radius: var(--hero-radius);
   overflow: hidden;
-  background: url('iletisim-hero.jpg') center / cover no-repeat;
+  background: url('hero-bg.jpg') center / cover no-repeat;
   background-color: #1a2a1a;
 }
 
