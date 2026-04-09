@@ -12,7 +12,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className="antialiased"
     >
-      <body>
+      <body style={{ fontFamily: "'Inter', sans-serif" }}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
