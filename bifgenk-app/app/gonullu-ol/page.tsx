@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import Script from "next/script";
+import GonulluForm from "./form";
 
 export default function GonulluOlPage() {
   const htmlPath = path.join(process.cwd(), "public", "landing.html");
@@ -328,74 +329,7 @@ export default function GonulluOlPage() {
       </div>
     </section>
 
-    <!-- ============================================
-         SECTION 7 — Application Form
-         ============================================ -->
-    <section class="gonullu-form-section" id="basvuru">
-      <div class="gonullu-form-container">
-        <div class="gonullu-form-header">
-          <span class="gonullu-section-tag">Başvuru Formu</span>
-          <h2>Gönüllü olmak ister misin?</h2>
-          <p>Bilgilerini doldur, en kısa sürede seninle iletişime geçelim.</p>
-        </div>
-        <form class="gonullu-form" id="gonulluForm" action="https://formsubmit.co/info@brisk.be" method="POST">
-          <input type="hidden" name="_subject" value="Yeni Gönüllü Başvurusu - BIF Genk"/>
-          <input type="hidden" name="_captcha" value="false"/>
-          <input type="text" name="_honey" style="display:none"/>
-          <div class="gonullu-form-row">
-            <div class="gonullu-form-group">
-              <label for="gonullu-name">Ad Soyad *</label>
-              <input type="text" id="gonullu-name" name="name" placeholder="Örn. Mehmet Kadam" required/>
-            </div>
-            <div class="gonullu-form-group">
-              <label for="gonullu-age">Yaş *</label>
-              <input type="number" id="gonullu-age" name="age" placeholder="Örn. 22" required min="14" max="99"/>
-            </div>
-          </div>
-          <div class="gonullu-form-row">
-            <div class="gonullu-form-group">
-              <label for="gonullu-email">E-posta *</label>
-              <input type="email" id="gonullu-email" name="email" placeholder="ornek@email.com" required/>
-            </div>
-            <div class="gonullu-form-group">
-              <label for="gonullu-phone">Telefon *</label>
-              <input type="tel" id="gonullu-phone" name="phone" placeholder="+32 4XX XX XX XX" required/>
-            </div>
-          </div>
-          <div class="gonullu-form-group gonullu-form-full">
-            <label for="gonullu-area">İlgi Alanın *</label>
-            <select id="gonullu-area" name="area" required>
-              <option value="" disabled selected>Bir alan seç...</option>
-              <option value="etkinlik">Etkinlik Organizasyonu</option>
-              <option value="sosyal-medya">Sosyal Medya & İletişim</option>
-              <option value="karsilama">Yeni Üye Karşılama</option>
-              <option value="egitim">Eğitim & Mentorluk</option>
-              <option value="spor">Spor & Aktivite</option>
-              <option value="hepsi">Hepsine Açığım</option>
-            </select>
-          </div>
-          <div class="gonullu-form-group gonullu-form-full">
-            <label for="gonullu-message">Kendinden Bahset</label>
-            <textarea id="gonullu-message" name="message" rows="4" placeholder="Neden gönüllü olmak istiyorsun? Daha önce gönüllü deneyimin var mı?"></textarea>
-          </div>
-          <button type="submit" class="gonullu-form-submit" id="gonulluSubmitBtn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 2L11 13"/>
-              <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
-            </svg>
-            Başvurumu Gönder
-          </button>
-          <div id="gonulluSuccess" style="display:none; text-align:center; padding:24px; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; margin-top:8px;">
-            <strong style="color:#109B4A; font-size:1.1rem;">Başvurun alındı!</strong>
-            <p style="color:#555; margin:8px 0 0; font-size:0.95rem;">En kısa sürede seninle iletişime geçeceğiz.</p>
-          </div>
-          <div id="gonulluError" style="display:none; text-align:center; padding:24px; background:#fef2f2; border:1px solid #fecaca; border-radius:12px; margin-top:8px;">
-            <strong style="color:#dc2626; font-size:1.1rem;">Bir hata oluştu</strong>
-            <p style="color:#555; margin:8px 0 0; font-size:0.95rem;">Lütfen tekrar dene veya bize WhatsApp ile ulaş.</p>
-          </div>
-        </form>
-      </div>
-    </section>
+    <!-- FORM_PLACEHOLDER -->
 
     <!-- ============================================
          SECTION 8 — CTA (matching homepage style)
@@ -459,54 +393,26 @@ export default function GonulluOlPage() {
       />
       <link rel="stylesheet" href="/site-styles.css" />
       <link rel="stylesheet" href="/gonullu-styles.css" />
-      <div
-        style={{ fontFamily: "'Nunito', sans-serif" }}
-        dangerouslySetInnerHTML={{
-          __html:
-            headerHtml +
-            mobileOverlay +
-            drawerHtml +
-            pageContent +
-            footerHtml,
-        }}
-      />
+      {(() => {
+        const fullHtmlContent = headerHtml + mobileOverlay + drawerHtml + pageContent + footerHtml;
+        const parts = fullHtmlContent.split("<!-- FORM_PLACEHOLDER -->");
+        return (
+          <>
+            <div
+              style={{ fontFamily: "'Nunito', sans-serif" }}
+              dangerouslySetInnerHTML={{ __html: parts[0] }}
+            />
+            <div style={{ fontFamily: "'Nunito', sans-serif" }}>
+              <GonulluForm />
+            </div>
+            <div
+              style={{ fontFamily: "'Nunito', sans-serif" }}
+              dangerouslySetInnerHTML={{ __html: parts[1] || "" }}
+            />
+          </>
+        );
+      })()}
       <Script src="/nav-script.js" strategy="afterInteractive" />
-      <Script id="gonullu-form-handler" strategy="lazyOnload">{`
-        var gf = document.getElementById('gonulluForm');
-        if (gf) {
-          gf.addEventListener('submit', function(e) {
-            e.preventDefault();
-            var btn = document.getElementById('gonulluSubmitBtn');
-            var ok = document.getElementById('gonulluSuccess');
-            var err = document.getElementById('gonulluError');
-            btn.disabled = true;
-            btn.textContent = 'Gönderiliyor...';
-            ok.style.display = 'none';
-            err.style.display = 'none';
-            fetch('https://formsubmit.co/ajax/info@brisk.be', {
-              method: 'POST',
-              body: new FormData(gf)
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(d) {
-              if (d.success === 'true' || d.success === true) {
-                ok.style.display = 'block';
-                gf.reset();
-                gf.style.display = 'none';
-              } else {
-                err.style.display = 'block';
-              }
-              btn.disabled = false;
-              btn.innerHTML = 'Başvurumu Gönder';
-            })
-            .catch(function() {
-              err.style.display = 'block';
-              btn.disabled = false;
-              btn.innerHTML = 'Başvurumu Gönder';
-            });
-          });
-        }
-      `}</Script>
     </>
   );
 }
