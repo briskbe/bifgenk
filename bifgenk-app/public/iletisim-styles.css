@@ -1,0 +1,455 @@
+/* ===== İletişim Page Styles ===== */
+
+/* Hero */
+.iletisim-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0d8a3e 0%, #109B4A 40%, #14b856 70%, #1cc65f 100%);
+  padding: 100px 0 80px;
+}
+
+.iletisim-hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.iletisim-hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: pulse 6s ease-in-out infinite;
+}
+
+.iletisim-hero-orb-1 {
+  width: 320px;
+  height: 320px;
+  top: 10%;
+  left: 15%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.iletisim-hero-orb-2 {
+  width: 380px;
+  height: 380px;
+  bottom: 10%;
+  right: 10%;
+  background: rgba(16, 155, 74, 0.3);
+  animation-delay: 2s;
+}
+
+.iletisim-hero-orb-3 {
+  width: 200px;
+  height: 200px;
+  top: 60%;
+  left: 60%;
+  background: rgba(20, 184, 86, 0.2);
+  animation-delay: 4s;
+}
+
+.iletisim-hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    linear-gradient(white 1px, transparent 1px),
+    linear-gradient(90deg, white 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.iletisim-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.iletisim-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 100px;
+  padding: 6px 18px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.iletisim-hero-content h1 {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+
+.iletisim-hero-content p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  max-width: 520px;
+  margin: 0;
+}
+
+.iletisim-hero-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  line-height: 0;
+}
+
+.iletisim-hero-wave svg {
+  width: 100%;
+  height: auto;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* Main Content */
+.iletisim-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 32px 100px;
+}
+
+.iletisim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* Contact Info */
+.iletisim-info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.iletisim-info-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+}
+
+.iletisim-info-header p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Contact Cards */
+.iletisim-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.iletisim-card {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.iletisim-card:hover {
+  border-color: #a7f3d0;
+  box-shadow: 0 8px 30px rgba(16, 155, 74, 0.08);
+  transform: translateY(-2px);
+}
+
+.iletisim-card-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #ecfdf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #109B4A;
+  transition: transform 0.3s ease;
+}
+
+.iletisim-card:hover .iletisim-card-icon {
+  transform: scale(1.1);
+}
+
+.iletisim-card-icon-wa {
+  background: #dcfce7;
+  color: #25d366;
+}
+
+.iletisim-card-whatsapp {
+  border-color: #bbf7d0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.iletisim-card-whatsapp:hover {
+  border-color: #86efac;
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.12);
+}
+
+.iletisim-card-avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #109B4A, #14b856);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  transition: transform 0.3s ease;
+}
+
+.iletisim-card:hover .iletisim-card-avatar {
+  transform: scale(1.1);
+}
+
+.iletisim-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.iletisim-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+}
+
+.iletisim-card-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.iletisim-card-link {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.iletisim-card-link:hover {
+  color: #109B4A;
+}
+
+.iletisim-card-sub {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Routebeschrijving button */
+.iletisim-route-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px 18px;
+  background: #109B4A;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.iletisim-route-btn:hover {
+  background: #0d8a3e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 155, 74, 0.3);
+}
+
+/* WhatsApp button */
+.iletisim-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px 18px;
+  background: #25d366;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.iletisim-wa-btn:hover {
+  background: #20bd5a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+}
+
+/* Map Section */
+.iletisim-map-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.iletisim-map-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+}
+
+.iletisim-map-header p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.iletisim-map-container {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.iletisim-map-container iframe {
+  display: block;
+  width: 100%;
+  height: 400px;
+}
+
+.iletisim-map-overlay {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  max-width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.iletisim-map-pin {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #109B4A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.iletisim-map-overlay strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.iletisim-map-overlay span {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+/* Quick Info Grid */
+.iletisim-quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.iletisim-quick-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.iletisim-quick-card svg {
+  color: #109B4A;
+  margin-bottom: 10px;
+}
+
+.iletisim-quick-card h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 4px;
+}
+
+.iletisim-quick-card p {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 900px) {
+  .iletisim-hero {
+    padding: 80px 0 60px;
+  }
+
+  .iletisim-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .iletisim-main {
+    padding: 48px 20px 64px;
+  }
+}
+
+@media (max-width: 600px) {
+  .iletisim-hero {
+    padding: 60px 0 50px;
+  }
+
+  .iletisim-hero-content {
+    padding: 0 20px;
+  }
+
+  .iletisim-card {
+    padding: 18px;
+  }
+
+  .iletisim-map-container iframe {
+    height: 300px;
+  }
+
+  .iletisim-quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .iletisim-map-overlay {
+    max-width: none;
+  }
+}
