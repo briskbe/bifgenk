@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BifGenk</title>
+  <link rel="stylesheet" href="/site-styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <img src="logo.png" alt="Genk Gençlik BIF" class="logo-img">
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <div class="nav-item has-dropdown">
+          <button class="nav-link dropdown-toggle">
+            Etkinlikler
+            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="3"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                  <line x1="9" y1="2" x2="9" y2="6"/>
+                  <line x1="15" y1="2" x2="15" y2="6"/>
+                  <circle cx="12" cy="16" r="1.5" fill="currentColor" stroke="none"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Yaklaşan etkinlikler</strong>
+                <p>Neler oluyor, bir bakın</p>
+              </div>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="18" rx="3"/>
+                  <circle cx="9" cy="10" r="2.5"/>
+                  <path d="M2 19l5-4.5a2 2 0 0 1 2.5 0l3.5 3"/>
+                  <path d="M15 15l1.5-1.5a2 2 0 0 1 2.5 0L22 16"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Galeri</strong>
+                <p>Anılarımız, kareler halinde</p>
+              </div>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2L15 8.5L22 9.5L17 14.5L18.2 21.5L12 18L5.8 21.5L7 14.5L2 9.5L9 8.5Z"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Turnuvalar</strong>
+                <p>Spor ve rekabet bir arada</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item has-dropdown">
+          <button class="nav-link dropdown-toggle">
+            Hakkımızda
+            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10"/>
+                  <path d="M12 8v4l3 3"/>
+                  <path d="M17 3.3A9 9 0 0 1 21.7 8"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Hikayemiz</strong>
+                <p>Nereden geldik, nereye gidiyoruz</p>
+              </div>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="7" r="3.5"/>
+                  <circle cx="17" cy="9" r="2.5"/>
+                  <path d="M2 21c0-4.4 3.6-7 7-7 1.5 0 2.9.4 4 1.2"/>
+                  <path d="M22 21c0-3-2.2-5.5-5-5.5-1.2 0-2.3.4-3.2 1"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Ekibimiz</strong>
+                <p>Yönetim ve gönüllüler</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item has-dropdown">
+          <button class="nav-link dropdown-toggle">
+            Topluluk
+            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.8 11.1C21.6 9.5 22 7.8 22 6c-4 0-7 1-9 3.5"/>
+                  <path d="M3.2 11.1C2.4 9.5 2 7.8 2 6c4 0 7 1 9 3.5"/>
+                  <path d="M12 9.5C12 15 8 19 5 21"/>
+                  <path d="M12 9.5C12 15 16 19 19 21"/>
+                  <line x1="12" y1="9.5" x2="12" y2="22"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Gönüllü ol</strong>
+                <p>Aramıza katılın</p>
+              </div>
+            </a>
+            <a href="#" class="dropdown-item">
+              <span class="dropdown-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-9-9 9 9 0 0 1 9-9"/>
+                  <polyline points="22 4 12 14 9 11"/>
+                </svg>
+              </span>
+              <div>
+                <strong>Haberler</strong>
+                <p>Son gelişmeler</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="#" class="nav-link">İletişim</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#" class="btn-login">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="8" cy="5.5" r="3"/>
+            <path d="M2.5 14c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke-linecap="round"/>
+          </svg>
+          Üye Girişi
+        </a>
+        <a href="#" class="btn-cta">Üye Ol</a>
+        <div class="lang-toggle">
+          TR
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2.5 3.75L5 6.25L7.5 3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-header">
+      <a href="/" class="nav-logo">
+        <img src="logo.png" alt="Genk Gençlik BIF" class="logo-img">
+      </a>
+      <button class="mobile-close" id="mobileClose" aria-label="Close menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="4" y1="4" x2="16" y2="16"/>
+          <line x1="16" y1="4" x2="4" y2="16"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mobile-drawer-body">
+      <nav class="mobile-nav">
+        <div class="mobile-nav-group" data-index="0">
+          <button class="mobile-nav-heading">
+            <div class="mobile-nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="3"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+                <line x1="9" y1="2" x2="9" y2="6"/>
+                <line x1="15" y1="2" x2="15" y2="6"/>
+              </svg>
+            </div>
+            Etkinlikler
+            <svg class="mobile-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M4 5.5L7 8.5L10 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="mobile-nav-sub">
+            <a href="#">Yaklaşan etkinlikler</a>
+            <a href="#">Galeri</a>
+            <a href="#">Turnuvalar</a>
+          </div>
+        </div>
+
+        <div class="mobile-nav-group" data-index="1">
+          <button class="mobile-nav-heading">
+            <div class="mobile-nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10"/>
+                <path d="M12 8v4l3 3"/>
+                <path d="M17 3.3A9 9 0 0 1 21.7 8"/>
+              </svg>
+            </div>
+            Hakkımızda
+            <svg class="mobile-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M4 5.5L7 8.5L10 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="mobile-nav-sub">
+            <a href="#">Hikayemiz</a>
+            <a href="#">Ekibimiz</a>
+          </div>
+        </div>
+
+        <div class="mobile-nav-group" data-index="2">
+          <button class="mobile-nav-heading">
+            <div class="mobile-nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.8 11.1C21.6 9.5 22 7.8 22 6c-4 0-7 1-9 3.5"/>
+                <path d="M3.2 11.1C2.4 9.5 2 7.8 2 6c4 0 7 1 9 3.5"/>
+                <path d="M12 9.5C12 15 8 19 5 21"/>
+                <path d="M12 9.5C12 15 16 19 19 21"/>
+                <line x1="12" y1="9.5" x2="12" y2="22"/>
+              </svg>
+            </div>
+            Topluluk
+            <svg class="mobile-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M4 5.5L7 8.5L10 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="mobile-nav-sub">
+            <a href="#">Gönüllü ol</a>
+            <a href="#">Haberler</a>
+          </div>
+        </div>
+
+        <a href="#" class="mobile-nav-link" data-index="3">
+          <div class="mobile-nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+          </div>
+          İletişim
+        </a>
+      </nav>
+
+      <div class="mobile-drawer-divider" data-index="4"></div>
+
+      <div class="mobile-drawer-actions" data-index="5">
+        <a href="#" class="mobile-btn-primary">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="9" cy="6.5" r="3.5"/>
+            <path d="M2.5 16c0-3.5 2.9-6 6.5-6s6.5 2.5 6.5 6" stroke-linecap="round"/>
+          </svg>
+          Üye Ol
+        </a>
+        <a href="#" class="mobile-btn-outline">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="5" width="12" height="10" rx="2"/>
+            <path d="M6 5V3.5A2.5 2.5 0 0 1 8.5 1h1A2.5 2.5 0 0 1 12 3.5V5"/>
+            <circle cx="9" cy="10.5" r="1.5"/>
+          </svg>
+          Üye Girişi
+        </a>
+      </div>
+
+      <div class="mobile-drawer-footer" data-index="6">
+        <div class="mobile-lang-switcher">
+          <button class="mobile-lang active">TR</button>
+          <button class="mobile-lang">NL</button>
+          <button class="mobile-lang">EN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-wrapper">
+    <div class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          BIF Genk Gençlik Kolları. Geleceği birlikte inşa ediyoruz.
+        </h1>
+
+        <p class="hero-subtitle">
+          Genk'in kalbinde, gençlerin sesi. Kültür, topluluk ve bir arada olmanın gücü — tek bir çatı altında.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#" class="btn-primary">
+            Bizi tanıyın
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#" class="btn-secondary">Üye olun</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number" data-target="2012">0</span>
+            <span class="stat-label">'den beri aktif</span>
+          </div>
+          <div class="stat-dot"></div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="80">0</span>
+            <span class="stat-label">genç üye</span>
+          </div>
+          <div class="stat-dot"></div>
+          <div class="stat-item">
+            <span class="stat-text">Her hafta</span>
+            <span class="stat-label">buluşuyoruz</span>
+          </div>
+        </div>
+
+        <div class="hero-features">
+          <div class="hero-feature">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 1l2.47 5.006 5.523.803-3.997 3.896.943 5.5L9 13.512l-4.939 2.694.943-5.5L1.007 6.81l5.523-.803z" stroke="white" stroke-width="1.2" fill="none"/>
+            </svg>
+            Etkinlikler ve buluşmalar
+          </div>
+          <div class="hero-feature">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M13.5 3.75L7.5 14.25l-3-3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Kültür ve dayanışma
+          </div>
+          <div class="hero-feature">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.2"/>
+              <path d="M9 5v4l2.5 2.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            Herkese açık, herkes için
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Announcement Banner -->
+  <section class="announcement-wrapper">
+    <div class="announcement">
+      <strong>Yeni sezon başladı — etkinlik takvimimizi keşfedin.</strong>
+      <a href="#">
+        Takvimi gör
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7H11M11 7L7.5 3.5M11 7L7.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Prayer Times -->
+  <section class="prayer-section">
+    <div class="prayer-container">
+      <div class="prayer-header">
+        <div class="prayer-title-row">
+          <div class="prayer-icon-wrap">
+            <svg class="prayer-mosque" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 22h20"/>
+              <path d="M5 22v-8"/>
+              <path d="M19 22v-8"/>
+              <path d="M5 14c0-4 3.1-7 7-7s7 3 7 7"/>
+              <path d="M9 22v-4a3 3 0 0 1 6 0v4"/>
+              <path d="M12 7V3"/>
+              <circle cx="12" cy="2.5" r="0.5" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="prayer-title">Namaz Vakitleri</h2>
+            <p class="prayer-date" id="prayerDate"></p>
+          </div>
+        </div>
+        <div class="prayer-countdown" id="prayerCountdown">
+          <span class="countdown-label">Sonraki namaza</span>
+          <span class="countdown-time" id="countdownTime">--:--:--</span>
+        </div>
+      </div>
+
+      <div class="city-switcher" id="citySwitcher">
+        <button class="city-pill active" data-id="11898">Genk</button>
+        <button class="city-pill" data-id="11915">Brüksel</button>
+        <button class="city-pill" data-id="11914">Antwerp</button>
+        <button class="city-pill" data-id="11916">Gent</button>
+        <button class="city-pill" data-id="11917">Liège</button>
+        <button class="city-pill" data-id="11895">Charleroi</button>
+        <button class="city-pill" data-id="11891">Bruges</button>
+        <button class="city-pill" data-id="11889">Namur</button>
+        <button class="city-pill" data-id="11899">Hasselt</button>
+        <button class="city-pill" data-id="11706">Leuven</button>
+      </div>
+
+      <div class="prayer-grid" id="prayerGrid">
+        <div class="prayer-card" data-prayer="Fajr">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 7.66l-.71-.71M4.05 4.05l-.71-.71"/>
+              <path d="M16 12a4 4 0 0 0-8 0" stroke-width="1.5"/>
+              <line x1="4" y1="18" x2="20" y2="18" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="prayer-name">İmsak</span>
+          <span class="prayer-time" id="timeFajr">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Sunrise">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m17.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m14.14 0l-1.41-1.41M6.34 6.34L4.93 4.93"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Güneş</span>
+          <span class="prayer-time" id="timeSunrise">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Dhuhr">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 2v4m0 12v4m10-10h-4M6 12H2"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Öğle</span>
+          <span class="prayer-time" id="timeDhuhr">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Asr">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="10" cy="12" r="4"/>
+              <path d="M10 2v2m0 16v2m8-12h2M2 12h2m13.07-7.07l1.41 1.41M5.34 17.66l-1.41 1.41"/>
+              <line x1="4" y1="20" x2="20" y2="20" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="prayer-name">İkindi</span>
+          <span class="prayer-time" id="timeAsr">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Maghrib">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M17 12a5 5 0 0 0-10 0"/>
+              <line x1="12" y1="3" x2="12" y2="7"/>
+              <line x1="5.6" y1="5.6" x2="7.8" y2="7.8"/>
+              <line x1="18.4" y1="5.6" x2="16.2" y2="7.8"/>
+              <line x1="3" y1="16" x2="21" y2="16"/>
+              <line x1="5" y1="19" x2="19" y2="19"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Akşam</span>
+          <span class="prayer-time" id="timeMaghrib">--:--</span>
+        </div>
+        <div class="prayer-card" data-prayer="Isha">
+          <div class="prayer-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+              <circle cx="15" cy="6" r="0.5" fill="currentColor" stroke="none"/>
+              <circle cx="18" cy="10" r="0.3" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <span class="prayer-name">Yatsı</span>
+          <span class="prayer-time" id="timeIsha">--:--</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mescid Sohbetleri -->
+  <section class="sohbet-section">
+    <div class="sohbet-container">
+      <div class="sohbet-image-col">
+        <div class="sohbet-image-wrapper">
+          <img src="sohbet.jpg" alt="Mescid Sohbetleri — gençler halka şeklinde oturmuş sohbet ediyor" class="sohbet-image">
+          <div class="sohbet-image-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            Planlı buluşmalar
+          </div>
+          <div class="sohbet-image-glow"></div>
+        </div>
+      </div>
+
+      <div class="sohbet-text-col">
+        <span class="sohbet-eyebrow">Mescidde buluşuyoruz</span>
+        <h2 class="sohbet-title">Mescid Sohbetleri</h2>
+        <p class="sohbet-desc">
+          Mescidimizde düzenlediğimiz sohbetlerde gündelik hayattan ilham alan konuları interaktif diyaloglarla keşfediyoruz. Tarihler önceden planlanıyor — takvimimize göz atın.
+        </p>
+
+        <div class="sohbet-features">
+          <div class="sohbet-feature">
+            <div class="sohbet-feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <div>
+              <strong>İnteraktif diyaloglar</strong>
+              <p>Tek yönlü değil, birlikte düşünüyoruz. Her soru bir kapı açar.</p>
+            </div>
+          </div>
+          <div class="sohbet-feature">
+            <div class="sohbet-feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="3"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+                <line x1="9" y1="2" x2="9" y2="6"/>
+                <line x1="15" y1="2" x2="15" y2="6"/>
+              </svg>
+            </div>
+            <div>
+              <strong>Planlı tarihler</strong>
+              <p>Sohbetler önceden duyurulur. Takvimi takip et, anı kaçırma.</p>
+            </div>
+          </div>
+          <div class="sohbet-feature">
+            <div class="sohbet-feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div>
+              <strong>Herkese açık</strong>
+              <p>Yaş fark etmez, ön bilgi gerekmez. Gel, otur, katıl.</p>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="sohbet-cta">
+          Takvime göz at
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ev Sohbetleri -->
+  <section class="ev-section">
+    <div class="ev-container">
+      <div class="ev-text-col">
+        <div class="ev-label">
+          <span class="ev-label-dot"></span>
+          Samimi sohbetler, sıcak ortamlar
+        </div>
+        <h2 class="ev-title">Ev Sohbetleri</h2>
+        <p class="ev-desc">
+          Sohbet her zaman bir mescide ihtiyaç duymaz. Evlerde bir araya geliyor, çay eşliğinde anlamlı konuşmalar yapıyoruz. Samimi, rahat ve tam da senin için.
+        </p>
+
+        <div class="ev-highlights">
+          <div class="ev-highlight">
+            <div class="ev-highlight-number">01</div>
+            <div>
+              <strong>Ev ortamında, sıcak bir atmosfer</strong>
+              <p>Koltuklar, çay ve samimi sohbet. Tanıdık bir ortamda derin konular.</p>
+            </div>
+          </div>
+          <div class="ev-highlight">
+            <div class="ev-highlight-number">02</div>
+            <div>
+              <strong>Kuşaklar arası bağ</strong>
+              <p>Gençler ve büyükler bir arada. Tecrübe ve enerji aynı sofrada buluşur.</p>
+            </div>
+          </div>
+          <div class="ev-highlight">
+            <div class="ev-highlight-number">03</div>
+            <div>
+              <strong>Tarihler takvimde</strong>
+              <p>Ev sohbetleri belirli günlerde planlanır. Takvimimizden takip edebilirsiniz.</p>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="ev-cta">
+          Takvime göz at
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="ev-image-col">
+        <div class="ev-image-wrapper">
+          <img src="ev-sohbet.jpg" alt="Ev Sohbetleri — evde bir arada sohbet eden gençler ve büyükler" class="ev-image">
+          <div class="ev-image-accent"></div>
+        </div>
+        <div class="ev-quote">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" opacity="0.3">
+            <path d="M3 21c3-3 4.5-6.5 4.5-10.5H3V3h8v7.5C11 16 7.5 19.5 3 21zm13 0c3-3 4.5-6.5 4.5-10.5H16V3h8v7.5C24 16 20.5 19.5 16 21z" fill="currentColor"/>
+          </svg>
+          <p>En güzel sohbetler, en rahat ortamlarda doğar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Aktiviteler -->
+  <section class="aktivite-section">
+    <div class="aktivite-bg">
+      <div class="aktivite-grid-pattern"></div>
+      <div class="aktivite-glow aktivite-glow-1"></div>
+      <div class="aktivite-glow aktivite-glow-2"></div>
+    </div>
+
+    <div class="aktivite-container">
+      <div class="aktivite-header">
+        <span class="aktivite-badge">Level up</span>
+        <h2 class="aktivite-title">Sadece sohbet değil.<br>Aksiyon da var.</h2>
+        <p class="aktivite-subtitle">FIFA turnuvaları, film geceleri, lasergame ve daha fazlası. Birlikte eğleniyoruz, birlikte büyüyoruz.</p>
+      </div>
+
+      <div class="aktivite-cards">
+        <div class="aktivite-card aktivite-card-image">
+          <img src="aktivite.jpg" alt="Lasergame etkinliği" class="aktivite-card-img">
+          <div class="aktivite-card-overlay"></div>
+          <div class="aktivite-card-content">
+            <span class="aktivite-card-tag">Son etkinlik</span>
+            <h3>Lasergame Night</h3>
+          </div>
+        </div>
+
+        <div class="aktivite-card aktivite-card-item" data-accent="#10b981">
+          <div class="aktivite-card-dot"></div>
+          <div class="aktivite-card-body">
+            <h3>FIFA Turnuvaları</h3>
+            <p>Controller'ı kap, sahaya çık. Şampiyonluğa giden yol buradan geçer.</p>
+          </div>
+          <span class="aktivite-card-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+
+        <div class="aktivite-card aktivite-card-item" data-accent="#8b5cf6">
+          <div class="aktivite-card-dot"></div>
+          <div class="aktivite-card-body">
+            <h3>Film Geceleri</h3>
+            <p>Büyük ekran, patlamış mısır ve unutulmaz filmler. Sinema keyfi bizde.</p>
+          </div>
+          <span class="aktivite-card-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+
+        <div class="aktivite-card aktivite-card-item" data-accent="#f59e0b">
+          <div class="aktivite-card-dot"></div>
+          <div class="aktivite-card-body">
+            <h3>Ve daha fazlası</h3>
+            <p>Bowling, karting, doğa yürüyüşleri... Takvime bak, bir sonraki maceraya hazırlan.</p>
+          </div>
+          <span class="aktivite-card-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="aktivite-footer">
+        <a href="#" class="aktivite-cta">
+          Etkinlik takvimini gör
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Başkan -->
+  <section class="baskan-section">
+    <div class="baskan-container">
+      <div class="baskan-card">
+        <div class="baskan-photo-col">
+          <img src="baskan.jpg" alt="Enis Şahin — BIF Genk Gençlik Başkanı" class="baskan-photo">
+          <div class="baskan-photo-overlay"></div>
+          <div class="baskan-photo-label">
+            <span class="baskan-eyebrow">Başkanımız</span>
+          </div>
+        </div>
+        <div class="baskan-text-col">
+          <h2 class="baskan-name">Enis Şahin</h2>
+          <p class="baskan-role">BIF Genk Gençlik Başkanı</p>
+          <p class="baskan-quote">
+            "Gençlerimizle birlikte büyüyor, birlikte güçleniyoruz. Amacımız her gencin kendini evinde hissettiği, değerli bildiği bir topluluk inşa etmek."
+          </p>
+          <div class="baskan-tags">
+            <span class="baskan-tag">Topluluk Lideri</span>
+            <span class="baskan-tag">Vizyon & Strateji</span>
+            <span class="baskan-tag">Gönüllü Hizmet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA + Footer -->
+  <section class="footer-cta-section">
+    <div class="footer-cta-bg">
+      <div class="footer-cta-orb footer-cta-orb-1"></div>
+      <div class="footer-cta-orb footer-cta-orb-2"></div>
+      <div class="footer-cta-orb footer-cta-orb-3"></div>
+      <div class="footer-cta-grid"></div>
+    </div>
+
+    <div class="footer-cta-container">
+      <div class="footer-cta-badge">
+        <span class="footer-cta-badge-dot"></span>
+        Aramıza katıl
+      </div>
+      <h2 class="footer-cta-title">Bir adım at,<br><span>gerisini birlikte yazalım.</span></h2>
+      <p class="footer-cta-desc">BIF Genk Gençlik ailesi seni bekliyor. Etkinliklere katıl, arkadaşlıklar kur, birlikte büyüyelim.</p>
+      <div class="footer-cta-actions">
+        <a href="#" class="footer-cta-btn footer-cta-btn-primary">
+          <span class="footer-cta-btn-glow"></span>
+          <span class="footer-cta-btn-text">
+            Üye Ol
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </a>
+        <a href="#" class="footer-cta-btn footer-cta-btn-secondary">
+          WhatsApp ile ulaş
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.61.609l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.25 0-4.336-.637-6.119-1.739l-.427-.262-2.882.966.966-2.882-.262-.427A9.935 9.935 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+          </svg>
+        </a>
+      </div>
+      <div class="footer-cta-trust">
+        <div class="footer-cta-avatars">
+          <div class="footer-cta-avatar" style="background: #10b981;">E</div>
+          <div class="footer-cta-avatar" style="background: #8b5cf6;">A</div>
+          <div class="footer-cta-avatar" style="background: #f59e0b;">M</div>
+          <div class="footer-cta-avatar" style="background: #3b82f6;">Y</div>
+        </div>
+        <span class="footer-cta-trust-text">50+ genç aramıza katıldı</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">
+            <img src="logo.png" alt="BIF Genk" class="footer-logo-img">
+          </a>
+          <p class="footer-brand-desc">Genk'te yaşayan gençleri bir araya getiren, birlikte büyüyen bir topluluk.</p>
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <circle cx="12" cy="12" r="5"/>
+                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="WhatsApp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.61.609l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.25 0-4.336-.637-6.119-1.739l-.427-.262-2.882.966.966-2.882-.262-.427A9.935 9.935 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Keşfet</h4>
+          <a href="#">Etkinlikler</a>
+          <a href="#">Galeri</a>
+          <a href="#">Turnuvalar</a>
+          <a href="#">Mescid Sohbetleri</a>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Hakkımızda</h4>
+          <a href="#">Hikayemiz</a>
+          <a href="#">Ekibimiz</a>
+          <a href="#">Başkanımız</a>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>İletişim</h4>
+          <a href="#">WhatsApp</a>
+          <a href="#">Instagram</a>
+          <a href="#">E-posta</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 BIF Genk Gençlik. Tüm hakları saklıdır.</p>
+        <p class="footer-made">Gençlerden gençlere.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/site-script.js"></script>
+</body>
+</html>
