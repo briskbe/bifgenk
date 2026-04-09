@@ -1,130 +1,126 @@
 /* ===== İletişim Page Styles ===== */
 
-/* Hero */
+/* Hero — contained card matching homepage hero style */
+.iletisim-hero-wrapper {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 12px var(--container-padding) 0;
+}
+
 .iletisim-hero {
   position: relative;
+  min-height: 340px;
+  border-radius: var(--hero-radius);
   overflow: hidden;
-  background: linear-gradient(135deg, #0d8a3e 0%, #109B4A 40%, #14b856 70%, #1cc65f 100%);
-  padding: 100px 0 80px;
+  background: linear-gradient(135deg, #062814 0%, #0a321c 30%, #0d8a3e 70%, #109B4A 100%);
 }
 
-.iletisim-hero-bg {
+/* Overlay gradient for depth */
+.iletisim-hero-overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    rgba(6, 40, 20, 0.7) 0%,
+    rgba(10, 50, 28, 0.5) 40%,
+    rgba(16, 155, 74, 0.2) 70%,
+    rgba(16, 155, 74, 0.05) 100%
+  );
+  z-index: 1;
 }
 
-.iletisim-hero-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  animation: pulse 6s ease-in-out infinite;
-}
-
-.iletisim-hero-orb-1 {
-  width: 320px;
-  height: 320px;
-  top: 10%;
-  left: 15%;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.iletisim-hero-orb-2 {
-  width: 380px;
-  height: 380px;
-  bottom: 10%;
-  right: 10%;
-  background: rgba(16, 155, 74, 0.3);
-  animation-delay: 2s;
-}
-
-.iletisim-hero-orb-3 {
-  width: 200px;
-  height: 200px;
-  top: 60%;
-  left: 60%;
-  background: rgba(20, 184, 86, 0.2);
-  animation-delay: 4s;
-}
-
-.iletisim-hero-grid {
+/* Shimmer sweep — same as homepage */
+.iletisim-hero-overlay::before {
+  content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.04;
-  background-image:
-    linear-gradient(white 1px, transparent 1px),
-    linear-gradient(90deg, white 1px, transparent 1px);
-  background-size: 48px 48px;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(16, 155, 74, 0.08) 45%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(16, 155, 74, 0.08) 55%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+/* Glow pulse — same as homepage */
+.iletisim-hero-overlay::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 60%;
+  height: 70%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(16, 155, 74, 0.15) 0%,
+    transparent 70%
+  );
+  animation: glowPulse 4s ease-in-out infinite;
 }
 
 .iletisim-hero-content {
   position: relative;
   z-index: 2;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 32px;
+  padding: 64px 56px 48px;
+  max-width: 640px;
 }
 
 .iletisim-hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 100px;
   padding: 6px 18px;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
   font-weight: 600;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease both;
 }
 
 .iletisim-hero-content h1 {
-  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
   font-weight: 800;
   color: #fff;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   margin: 0 0 16px;
+  animation: fadeInUp 0.6s ease both;
+  animation-delay: 0.1s;
 }
 
 .iletisim-hero-content p {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.6;
-  max-width: 520px;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.65;
+  max-width: 480px;
   margin: 0;
+  animation: fadeInUp 0.6s ease both;
+  animation-delay: 0.2s;
 }
 
-.iletisim-hero-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  line-height: 0;
-}
-
-.iletisim-hero-wave svg {
-  width: 100%;
-  height: auto;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.08); }
-}
+/* Use homepage's existing keyframes (shimmer, glowPulse, fadeInUp) */
 
 /* Main Content */
 .iletisim-main {
-  max-width: 1200px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 80px 32px 100px;
+  padding: 64px var(--container-padding) 80px;
 }
 
 .iletisim-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: 56px;
   align-items: start;
 }
 
@@ -136,15 +132,15 @@
 }
 
 .iletisim-info-header h2 {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin: 0 0 8px;
 }
 
 .iletisim-info-header p {
   font-size: 0.95rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -152,40 +148,40 @@
 .iletisim-cards {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .iletisim-card {
   display: flex;
   gap: 16px;
-  padding: 24px;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .iletisim-card:hover {
   border-color: #a7f3d0;
-  box-shadow: 0 8px 30px rgba(16, 155, 74, 0.08);
+  box-shadow: 0 6px 24px rgba(16, 155, 74, 0.08);
   transform: translateY(-2px);
 }
 
 .iletisim-card-icon {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 12px;
   background: #ecfdf5;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #109B4A;
-  transition: transform 0.3s ease;
+  color: var(--color-primary);
+  transition: transform 0.25s ease;
 }
 
 .iletisim-card:hover .iletisim-card-icon {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .iletisim-card-icon-wa {
@@ -195,37 +191,37 @@
 
 .iletisim-card-whatsapp {
   border-color: #bbf7d0;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
 }
 
 .iletisim-card-whatsapp:hover {
   border-color: #86efac;
-  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.12);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.1);
 }
 
 .iletisim-card-avatar {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #109B4A, #14b856);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-weight: 700;
-  font-size: 15px;
-  transition: transform 0.3s ease;
+  font-size: 14px;
+  transition: transform 0.25s ease;
 }
 
 .iletisim-card:hover .iletisim-card-avatar {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .iletisim-card-body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
 }
 
@@ -233,14 +229,14 @@
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #9ca3af;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
 }
 
 .iletisim-card-value {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -250,12 +246,12 @@
 }
 
 .iletisim-card-link:hover {
-  color: #109B4A;
+  color: var(--color-primary);
 }
 
 .iletisim-card-sub {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -264,11 +260,11 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
-  padding: 8px 18px;
-  background: #109B4A;
+  margin-top: 8px;
+  padding: 7px 16px;
+  background: var(--color-primary);
   color: #fff;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
@@ -276,9 +272,9 @@
 }
 
 .iletisim-route-btn:hover {
-  background: #0d8a3e;
+  background: var(--color-primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 155, 74, 0.3);
+  box-shadow: 0 4px 12px rgba(16, 155, 74, 0.25);
 }
 
 /* WhatsApp button */
@@ -286,11 +282,11 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
-  padding: 8px 18px;
+  margin-top: 8px;
+  padding: 7px 16px;
   background: #25d366;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
@@ -300,7 +296,7 @@
 .iletisim-wa-btn:hover {
   background: #20bd5a;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
 }
 
 /* Map Section */
@@ -311,54 +307,54 @@
 }
 
 .iletisim-map-header h2 {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin: 0 0 8px;
 }
 
 .iletisim-map-header p {
   font-size: 0.95rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .iletisim-map-container {
   position: relative;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
 }
 
 .iletisim-map-container iframe {
   display: block;
   width: 100%;
-  height: 400px;
+  height: 380px;
 }
 
 .iletisim-map-overlay {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  max-width: 280px;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  max-width: 260px;
   display: flex;
   align-items: center;
   gap: 12px;
   background: #fff;
   border-radius: 12px;
-  padding: 14px 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 12px 14px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .iletisim-map-pin {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 10px;
-  background: #109B4A;
+  background: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -369,13 +365,13 @@
   display: block;
   font-size: 13px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
 .iletisim-map-overlay span {
   display: block;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-top: 2px;
 }
 
@@ -383,39 +379,47 @@
 .iletisim-quick-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 14px;
 }
 
 .iletisim-quick-card {
-  padding: 20px;
-  border-radius: 16px;
+  padding: 18px;
+  border-radius: 14px;
   background: #ecfdf5;
-  border: 1px solid #a7f3d0;
+  border: 1px solid #d1fae5;
 }
 
 .iletisim-quick-card svg {
-  color: #109B4A;
-  margin-bottom: 10px;
+  color: var(--color-primary);
+  margin-bottom: 8px;
 }
 
 .iletisim-quick-card h4 {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text);
   margin: 0 0 4px;
 }
 
 .iletisim-quick-card p {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 /* ===== Responsive ===== */
 
 @media (max-width: 900px) {
+  .iletisim-hero-wrapper {
+    padding: 12px 20px 0;
+  }
+
   .iletisim-hero {
-    padding: 80px 0 60px;
+    min-height: 280px;
+  }
+
+  .iletisim-hero-content {
+    padding: 48px 36px 40px;
   }
 
   .iletisim-grid {
@@ -429,12 +433,17 @@
 }
 
 @media (max-width: 600px) {
+  .iletisim-hero-wrapper {
+    padding: 8px 12px 0;
+  }
+
   .iletisim-hero {
-    padding: 60px 0 50px;
+    min-height: 240px;
+    border-radius: 14px;
   }
 
   .iletisim-hero-content {
-    padding: 0 20px;
+    padding: 36px 24px 32px;
   }
 
   .iletisim-card {
@@ -442,7 +451,7 @@
   }
 
   .iletisim-map-container iframe {
-    height: 300px;
+    height: 280px;
   }
 
   .iletisim-quick-grid {

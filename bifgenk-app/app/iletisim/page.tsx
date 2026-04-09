@@ -26,28 +26,20 @@ export default function IletisimPage() {
   const footerHtml = footerMatch ? footerMatch[1] : "";
 
   const contactContent = `
-    <!-- Hero Section -->
-    <section class="iletisim-hero">
-      <div class="iletisim-hero-bg">
-        <div class="iletisim-hero-orb iletisim-hero-orb-1"></div>
-        <div class="iletisim-hero-orb iletisim-hero-orb-2"></div>
-        <div class="iletisim-hero-orb iletisim-hero-orb-3"></div>
-        <div class="iletisim-hero-grid"></div>
-      </div>
-      <div class="iletisim-hero-content">
-        <div class="iletisim-hero-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-          </svg>
-          Bize Ulaşın
+    <!-- Hero Section — contained card matching homepage -->
+    <section class="iletisim-hero-wrapper">
+      <div class="iletisim-hero">
+        <div class="iletisim-hero-overlay"></div>
+        <div class="iletisim-hero-content">
+          <div class="iletisim-hero-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            Bize Ulaşın
+          </div>
+          <h1>İletişim</h1>
+          <p>Sorularınız, önerileriniz veya işbirlikleriniz için bizimle iletişime geçin. Size yardımcı olmaktan mutluluk duyarız.</p>
         </div>
-        <h1>İletişim</h1>
-        <p>Sorularınız, önerileriniz veya işbirlikleriniz için bizimle iletişime geçin. Size yardımcı olmaktan mutluluk duyarız.</p>
-      </div>
-      <div class="iletisim-hero-wave">
-        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0 80V40C240 0 480 0 720 40C960 80 1200 80 1440 40V80H0Z" fill="#f8f8f8"/>
-        </svg>
       </div>
     </section>
 
