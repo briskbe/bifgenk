@@ -266,7 +266,7 @@ export default function IletisimPage() {
             footerHtml,
         }}
       />
-      <Script src="/site-script.js" strategy="afterInteractive" />
+      <Script src="/nav-script.js" strategy="afterInteractive" />
     </>
   );
 }
