@@ -338,7 +338,7 @@ export default function GonulluOlPage() {
           <h2>Gönüllü olmak ister misin?</h2>
           <p>Bilgilerini doldur, en kısa sürede seninle iletişime geçelim.</p>
         </div>
-        <form class="gonullu-form" id="gonulluForm">
+        <form class="gonullu-form" id="gonulluForm" action="https://formsubmit.co/info@brisk.be" method="POST">
           <input type="hidden" name="_subject" value="Yeni Gönüllü Başvurusu - BIF Genk"/>
           <input type="hidden" name="_captcha" value="false"/>
           <input type="text" name="_honey" style="display:none"/>
@@ -471,7 +471,42 @@ export default function GonulluOlPage() {
         }}
       />
       <Script src="/nav-script.js" strategy="afterInteractive" />
-      <Script src="/gonullu-form.js" strategy="afterInteractive" />
+      <Script id="gonullu-form-handler" strategy="lazyOnload">{`
+        var gf = document.getElementById('gonulluForm');
+        if (gf) {
+          gf.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var btn = document.getElementById('gonulluSubmitBtn');
+            var ok = document.getElementById('gonulluSuccess');
+            var err = document.getElementById('gonulluError');
+            btn.disabled = true;
+            btn.textContent = 'Gönderiliyor...';
+            ok.style.display = 'none';
+            err.style.display = 'none';
+            fetch('https://formsubmit.co/ajax/info@brisk.be', {
+              method: 'POST',
+              body: new FormData(gf)
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+              if (d.success === 'true' || d.success === true) {
+                ok.style.display = 'block';
+                gf.reset();
+                gf.style.display = 'none';
+              } else {
+                err.style.display = 'block';
+              }
+              btn.disabled = false;
+              btn.innerHTML = 'Başvurumu Gönder';
+            })
+            .catch(function() {
+              err.style.display = 'block';
+              btn.disabled = false;
+              btn.innerHTML = 'Başvurumu Gönder';
+            });
+          });
+        }
+      `}</Script>
     </>
   );
 }
