@@ -2,6 +2,7 @@ import Script from "next/script";
 import { SiteNavbar } from "@/components/site/SiteNavbar";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { NewsExplorer } from "./NewsExplorer";
+import { NewsletterForm } from "./NewsletterForm";
 import { CATEGORY_LABELS, articles } from "./news-data";
 
 export const metadata = {
@@ -140,28 +141,7 @@ export default function HaberlerPage() {
                   doğrudan gelen kutuna gelsin.
                 </p>
               </div>
-              <form
-                className="news-newsletter-form"
-                action="#"
-                method="post"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <label className="sr-only" htmlFor="newsletter-email">
-                  E-posta
-                </label>
-                <input
-                  id="newsletter-email"
-                  type="email"
-                  placeholder="E-posta adresin"
-                  required
-                />
-                <button type="submit">
-                  Abone ol
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-                    <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </form>
+              <NewsletterForm />
             </div>
           </div>
         </section>
