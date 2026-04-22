@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+type DropdownKey = "etkinlikler" | "hakkimizda" | "topluluk";
 
 type NavProps = {
   active?: "etkinlikler" | "hakkimizda" | "topluluk" | "iletisim" | "haberler";
@@ -11,7 +13,9 @@ export function SiteNavbar({ active }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [lang, setLang] = useState<"TR" | "NL" | "EN">("TR");
+  const navMenuRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -34,8 +38,29 @@ export function SiteNavbar({ active }: NavProps) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  useEffect(() => {
+    if (!openDropdown) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (!navMenuRef.current?.contains(e.target as Node)) setOpenDropdown(null);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenDropdown(null);
+    };
+    document.addEventListener("click", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [openDropdown]);
+
   const toggleGroup = (key: string) =>
     setExpandedGroup((curr) => (curr === key ? null : key));
+
+  const toggleDropdown = (key: DropdownKey) =>
+    setOpenDropdown((curr) => (curr === key ? null : key));
+
+  const closeDropdown = () => setOpenDropdown(null);
 
   return (
     <>
@@ -48,17 +73,23 @@ export function SiteNavbar({ active }: NavProps) {
             <img src="/logo.png" alt="Genk Gençlik BIF" className="logo-img" />
           </Link>
 
-          <nav className="nav-menu" id="navMenu">
+          <nav className="nav-menu" id="navMenu" ref={navMenuRef}>
             <div
-              className={`nav-item has-dropdown${active === "etkinlikler" ? " active" : ""}`}
+              className={`nav-item has-dropdown${active === "etkinlikler" ? " active" : ""}${openDropdown === "etkinlikler" ? " open" : ""}`}
             >
-              <button className="nav-link dropdown-toggle">
+              <button
+                className="nav-link dropdown-toggle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleDropdown("etkinlikler");
+                }}
+              >
                 Etkinlikler
                 <svg className="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" onClick={closeDropdown}>
                 <a href="/#etkinlikler" className="dropdown-item">
                   <span className="dropdown-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -103,15 +134,21 @@ export function SiteNavbar({ active }: NavProps) {
             </div>
 
             <div
-              className={`nav-item has-dropdown${active === "hakkimizda" ? " active" : ""}`}
+              className={`nav-item has-dropdown${active === "hakkimizda" ? " active" : ""}${openDropdown === "hakkimizda" ? " open" : ""}`}
             >
-              <button className="nav-link dropdown-toggle">
+              <button
+                className="nav-link dropdown-toggle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleDropdown("hakkimizda");
+                }}
+              >
                 Hakkımızda
                 <svg className="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" onClick={closeDropdown}>
                 <a href="#" className="dropdown-item">
                   <span className="dropdown-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -143,15 +180,21 @@ export function SiteNavbar({ active }: NavProps) {
             </div>
 
             <div
-              className={`nav-item has-dropdown${active === "topluluk" || active === "haberler" ? " active" : ""}`}
+              className={`nav-item has-dropdown${active === "topluluk" || active === "haberler" ? " active" : ""}${openDropdown === "topluluk" ? " open" : ""}`}
             >
-              <button className="nav-link dropdown-toggle">
+              <button
+                className="nav-link dropdown-toggle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleDropdown("topluluk");
+                }}
+              >
                 Topluluk
                 <svg className="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" onClick={closeDropdown}>
                 <Link href="/register" className="dropdown-item">
                   <span className="dropdown-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

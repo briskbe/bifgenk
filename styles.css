@@ -127,7 +127,7 @@ button {
   opacity: 0.5;
 }
 
-.nav-item.active .chevron {
+.nav-item.open .chevron {
   transform: rotate(180deg);
 }
 
@@ -166,7 +166,7 @@ button {
   height: 10px;
 }
 
-.nav-item.active .dropdown-menu {
+.nav-item.open .dropdown-menu {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;

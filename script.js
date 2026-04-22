@@ -9,7 +9,7 @@ window.addEventListener('scroll', () => {
 const navItems = document.querySelectorAll('.nav-item.has-dropdown');
 
 function closeAllDropdowns() {
-  navItems.forEach(item => item.classList.remove('active'));
+  navItems.forEach(item => item.classList.remove('open'));
 }
 
 navItems.forEach(item => {
@@ -19,9 +19,9 @@ navItems.forEach(item => {
   toggle.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const wasActive = item.classList.contains('active');
+    const wasOpen = item.classList.contains('open');
     closeAllDropdowns();
-    if (!wasActive) item.classList.add('active');
+    if (!wasOpen) item.classList.add('open');
   });
 
   item.querySelectorAll('.dropdown-item').forEach(link => {
