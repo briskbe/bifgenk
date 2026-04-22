@@ -127,9 +127,14 @@ button {
   opacity: 0.5;
 }
 
-.nav-item:hover .chevron,
 .nav-item.active .chevron {
   transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .nav-item:hover .chevron {
+    transform: rotate(180deg);
+  }
 }
 
 /* Dropdowns */
@@ -161,12 +166,20 @@ button {
   height: 10px;
 }
 
-.nav-item:hover .dropdown-menu,
 .nav-item.active .dropdown-menu {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+}
+
+@media (hover: hover) {
+  .nav-item:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
 }
 
 .dropdown-item {

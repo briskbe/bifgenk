@@ -5,6 +5,38 @@ window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 10);
 });
 
+// Desktop dropdown: click to toggle, click outside / ESC / link click to close
+const navItems = document.querySelectorAll('.nav-item.has-dropdown');
+
+function closeAllDropdowns() {
+  navItems.forEach(item => item.classList.remove('active'));
+}
+
+navItems.forEach(item => {
+  const toggle = item.querySelector('.dropdown-toggle');
+  if (!toggle) return;
+
+  toggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const wasActive = item.classList.contains('active');
+    closeAllDropdowns();
+    if (!wasActive) item.classList.add('active');
+  });
+
+  item.querySelectorAll('.dropdown-item').forEach(link => {
+    link.addEventListener('click', closeAllDropdowns);
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-item.has-dropdown')) closeAllDropdowns();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAllDropdowns();
+});
+
 // Mobile drawer
 const mobileToggle = document.getElementById('mobileToggle');
 const mobileDrawer = document.getElementById('mobileDrawer');
