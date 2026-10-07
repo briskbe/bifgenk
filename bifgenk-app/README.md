@@ -1,21 +1,39 @@
-# Next.js template
+# BIF Genk app
 
-This is a Next.js template with shadcn/ui.
+Next.js app with member accounts, an admin panel (`/admin`) and announcements.
+Everything runs on Vercel: the database is Neon Postgres added through the
+Vercel Marketplace, and auth is handled in-app by [Better Auth](https://better-auth.com).
 
-## Adding components
+## Deploying on Vercel
 
-To add components to your app, run the following command:
+1. In the Vercel project, open **Storage → Create Database → Neon** and connect it.
+   This adds `DATABASE_URL` (and `DATABASE_URL_UNPOOLED`) automatically.
+2. In **Settings → Environment Variables**, add:
+   - `BETTER_AUTH_SECRET`: a random string (`openssl rand -base64 32`)
+   - `ADMIN_EMAIL` / `ADMIN_PASSWORD`: the first admin account
+3. Deploy. Every build runs database migrations and creates the admin account
+   if it doesn't exist yet (`npm run build`).
+
+`ADMIN_PASSWORD` is only used when the account is first created. To change it
+later, use **Şifre belirle** in the admin panel.
+
+## Local development
 
 ```bash
-npx shadcn@latest add button
+vercel env pull .env.local   # or copy .env.example and fill it in
+npm install
+npm run db:migrate
+npm run db:seed-admin
+npm run dev
 ```
 
-This will place the ui components in the `components` directory.
+## Database
 
-## Using components
+Tables are defined in `lib/db/schema.ts`. After changing it:
 
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
+```bash
+npm run db:generate   # writes a new SQL migration to drizzle/
+npm run db:migrate    # applies it
 ```
+
+`npm run db:studio` opens a browser UI for the database.

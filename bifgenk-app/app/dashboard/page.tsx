@@ -1,16 +1,20 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import Link from "next/link";
+import { desc } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { announcement } from "@/lib/db/schema";
+import { requireUser } from "@/lib/session";
+import { Button } from "@/components/ui/button";
 import { LogoutButton } from "./logout-button";
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { user } = await requireUser();
+  const announcements = await db
+    .select()
+    .from(announcement)
+    .orderBy(desc(announcement.createdAt))
+    .limit(10);
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  const fullName = user.user_metadata?.full_name || "Üye";
+  const fullName = user.name || "Üye";
   const initials = fullName
     .split(" ")
     .map((n: string) => n[0])
@@ -29,7 +33,14 @@ export default async function DashboardPage() {
             </div>
             <span className="font-bold text-lg">BIF Genk</span>
           </div>
-          <LogoutButton />
+          <div className="flex items-center gap-2">
+            {user.role === "admin" && (
+              <Button asChild variant="ghost" size="sm" className="text-sm">
+                <Link href="/admin">Yönetim paneli</Link>
+              </Button>
+            )}
+            <LogoutButton />
+          </div>
         </div>
       </header>
 
@@ -60,13 +71,46 @@ export default async function DashboardPage() {
             <div className="rounded-xl border bg-card p-5 space-y-1">
               <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Katılma tarihi</p>
               <p className="text-lg font-bold">
-                {new Date(user.created_at).toLocaleDateString("tr-TR", {
+                {user.createdAt.toLocaleDateString("tr-TR", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
                 })}
               </p>
             </div>
+          </div>
+
+          {/* Announcements */}
+          <div className="rounded-xl border bg-card p-6 space-y-4">
+            <h2 className="font-bold text-lg">Duyurular</h2>
+            {announcements.length === 0 ? (
+              <div className="text-sm text-muted-foreground py-8 text-center">
+                Henüz duyuru yok.
+              </div>
+            ) : (
+              <ul className="divide-y">
+                {announcements.map((item) => (
+                  <li key={item.id} className="py-4 first:pt-0 last:pb-0 space-y-1">
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                      <h3 className="font-semibold">{item.title}</h3>
+                      <time
+                        dateTime={item.createdAt.toISOString()}
+                        className="text-xs text-muted-foreground"
+                      >
+                        {item.createdAt.toLocaleDateString("tr-TR", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </time>
+                    </div>
+                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                      {item.content}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Upcoming */}
