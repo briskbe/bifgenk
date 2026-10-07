@@ -50,13 +50,13 @@ export async function adminLogout() {
 
 // ── Users ──────────────────────────────────────────────────────────────────
 
-async function run(action: () => Promise<unknown>, path = "/admin"): Promise<ActionResult> {
+async function run(action: () => Promise<unknown>): Promise<ActionResult> {
   try {
     await action();
   } catch (error) {
     return { error: authErrorMessage(error) };
   }
-  revalidatePath(path);
+  revalidatePath("/admin", "layout");
   return OK;
 }
 
@@ -121,7 +121,7 @@ function announcementInput(formData: FormData) {
 }
 
 function revalidateAnnouncements() {
-  revalidatePath("/admin/announcements");
+  revalidatePath("/admin", "layout");
   revalidatePath("/dashboard");
 }
 

@@ -49,8 +49,9 @@ export function ActionDialog({
     setError(null);
     startTransition(async () => {
       const result = await onSubmit(formData);
-      if ("error" in result) setError(result.error);
-      else handleOpenChange(false);
+      // Actions that redirect resolve without a result; the navigation takes over.
+      if (result && "error" in result) setError(result.error);
+      else if (result) handleOpenChange(false);
     });
   }
 

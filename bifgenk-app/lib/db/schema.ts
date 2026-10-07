@@ -1,4 +1,4 @@
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, date, index, jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 // Better Auth tables (core + admin plugin fields).
 
@@ -102,3 +102,30 @@ export const announcement = pgTable(
 );
 
 export type Announcement = typeof announcement.$inferSelect;
+
+export const meeting = pgTable(
+  "meeting",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    title: text("title").notNull(),
+    // Stored as a plain calendar date and "HH:MM" string so there is no
+    // timezone conversion between the admin's browser and the server.
+    date: date("date", { mode: "string" }).notNull(),
+    startTime: text("start_time"),
+    location: text("location"),
+    // BlockNote document (array of blocks).
+    content: jsonb("content").$type<unknown[]>().notNull().default([]),
+    createdById: text("created_by_id").references(() => user.id, { onDelete: "set null" }),
+    updatedById: text("updated_by_id").references(() => user.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (t) => [index("meeting_date_idx").on(t.date)]
+);
+
+export type Meeting = typeof meeting.$inferSelect;

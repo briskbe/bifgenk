@@ -1,193 +1,158 @@
 import Link from "next/link";
-import { count, desc, eq, ilike, or } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { user } from "@/lib/db/schema";
-import { requireAdmin } from "@/lib/session";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { asc, count, desc, eq, gte, lt } from "drizzle-orm";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { CreateUserButton, UserActions } from "./user-dialogs";
+  Calendar03Icon,
+  Megaphone01Icon,
+  UserGroupIcon,
+  ArrowRight01Icon,
+} from "@hugeicons/core-free-icons";
+import { db } from "@/lib/db";
+import { announcement, meeting, user } from "@/lib/db/schema";
+import { formatMeetingDate, meetingDateParts, todayISO } from "@/lib/meetings";
+import { requireAdmin } from "@/lib/session";
+import { NewMeetingButton } from "./meetings/new-meeting-button";
 
-const PAGE_SIZE = 25;
-
-export default async function AdminUsersPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string; page?: string }>;
-}) {
+export default async function AdminOverviewPage() {
   const { user: me } = await requireAdmin();
-  const { q = "", page: pageParam } = await searchParams;
-  const query = q.trim();
-  const page = Math.max(1, Number(pageParam) || 1);
+  const today = todayISO();
 
-  const where = query
-    ? or(ilike(user.name, `%${query}%`), ilike(user.email, `%${query}%`))
-    : undefined;
-
-  const [users, [{ total }], [{ admins }], [{ banned }], [{ matching }]] = await Promise.all([
-    db
-      .select()
-      .from(user)
-      .where(where)
-      .orderBy(desc(user.createdAt))
-      .limit(PAGE_SIZE)
-      .offset((page - 1) * PAGE_SIZE),
-    db.select({ total: count() }).from(user),
+  const [[{ members }], [{ meetings }], [{ announcements }], upcoming, recent, latestAnnouncements] =
+    await Promise.all([
+      db.select({ members: count() }).from(user),
+      db.select({ meetings: count() }).from(meeting),
+      db.select({ announcements: count() }).from(announcement),
+      db
+        .select()
+        .from(meeting)
+        .where(gte(meeting.date, today))
+        .orderBy(asc(meeting.date), asc(meeting.startTime))
+        .limit(3),
+      db.select().from(meeting).where(lt(meeting.date, today)).orderBy(desc(meeting.date)).limit(5),
+      db.select().from(announcement).orderBy(desc(announcement.createdAt)).limit(3),
+    ]);
+  const [[{ admins }], [{ upcomingCount }]] = await Promise.all([
     db.select({ admins: count() }).from(user).where(eq(user.role, "admin")),
-    db.select({ banned: count() }).from(user).where(eq(user.banned, true)),
-    db.select({ matching: count() }).from(user).where(where),
+    db.select({ upcomingCount: count() }).from(meeting).where(gte(meeting.date, today)),
   ]);
 
-  const pageCount = Math.max(1, Math.ceil(matching / PAGE_SIZE));
-  const pageHref = (p: number) => {
-    const params = new URLSearchParams();
-    if (query) params.set("q", query);
-    if (p > 1) params.set("page", String(p));
-    const qs = params.toString();
-    return qs ? `/admin?${qs}` : "/admin";
-  };
-
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-6xl space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight">Üyeler</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Hoş geldin, {me.name.split(" ")[0]}</h1>
           <p className="text-sm text-muted-foreground">
-            Tüm hesapları görüntüle, rollerini değiştir, askıya al veya sil.
+            {formatMeetingDate(today)} · BIF Genk yönetim paneline genel bakış.
           </p>
         </div>
-        <CreateUserButton />
+        <NewMeetingButton />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Stat label="Toplam üye" value={total} />
-        <Stat label="Yönetici" value={admins} />
-        <Stat label="Askıda" value={banned} />
+      <div className="grid gap-4 sm:grid-cols-3">
+        <StatCard href="/admin/users" icon={UserGroupIcon} label="Üyeler" value={members} hint={`${admins} yönetici`} />
+        <StatCard href="/admin/meetings" icon={Calendar03Icon} label="Toplantılar" value={meetings} hint={`${upcomingCount} yaklaşan`} />
+        <StatCard href="/admin/announcements" icon={Megaphone01Icon} label="Duyurular" value={announcements} hint="Tüm üyelere görünür" />
       </div>
 
-      <div className="rounded-xl border bg-card">
-        <form className="flex gap-2 border-b p-4" action="/admin">
-          <Input
-            name="q"
-            defaultValue={query}
-            placeholder="İsim veya e-posta ara"
-            className="h-10 max-w-sm"
-          />
-          <Button type="submit" variant="outline">
-            Ara
-          </Button>
-          {query && (
-            <Button asChild variant="ghost">
-              <Link href="/admin">Temizle</Link>
-            </Button>
-          )}
-        </form>
-
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="pl-4">Üye</TableHead>
-              <TableHead>Rol</TableHead>
-              <TableHead>Durum</TableHead>
-              <TableHead>Katılma tarihi</TableHead>
-              <TableHead className="w-12 pr-4" />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} className="py-12 text-center text-muted-foreground">
-                  {query ? "Aramanla eşleşen üye yok." : "Henüz üye yok."}
-                </TableCell>
-              </TableRow>
-            ) : (
-              users.map((u) => (
-                <TableRow key={u.id}>
-                  <TableCell className="pl-4">
-                    <div className="font-medium">
-                      {u.name}
-                      {u.id === me.id && (
-                        <span className="ml-2 text-xs text-muted-foreground">(sen)</span>
+      <div className="grid gap-6 lg:grid-cols-5">
+        <section className="space-y-4 rounded-2xl border bg-card p-6 lg:col-span-3">
+          <SectionHeader title="Toplantılar" href="/admin/meetings" />
+          {upcoming.length === 0 && recent.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">Henüz toplantı yok.</p>
+          ) : (
+            <ul className="divide-y">
+              {[...upcoming, ...recent].map((m) => {
+                const parts = meetingDateParts(m.date);
+                const isUpcoming = m.date >= today;
+                return (
+                  <li key={m.id}>
+                    <Link
+                      href={`/admin/meetings/${m.id}`}
+                      className="-mx-2 flex items-center gap-4 rounded-xl px-2 py-3 hover:bg-muted/60"
+                    >
+                      <div className="flex w-12 shrink-0 flex-col items-center rounded-lg bg-primary/10 py-1.5 text-primary">
+                        <span className="text-lg font-bold leading-none">{parts.day}</span>
+                        <span className="text-[10px] font-semibold uppercase">{parts.month}</span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-medium">{m.title}</p>
+                        <p className="truncate text-xs text-muted-foreground capitalize">
+                          {parts.weekday}
+                          {m.startTime && ` · ${m.startTime}`}
+                          {m.location && ` · ${m.location}`}
+                        </p>
+                      </div>
+                      {isUpcoming && (
+                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                          {m.date === today ? "Bugün" : "Yaklaşan"}
+                        </span>
                       )}
-                    </div>
-                    <div className="text-xs text-muted-foreground">{u.email}</div>
-                  </TableCell>
-                  <TableCell>
-                    {u.role === "admin" ? (
-                      <Badge>Yönetici</Badge>
-                    ) : (
-                      <Badge variant="secondary">Üye</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {u.banned ? (
-                      <Badge variant="destructive" title={u.banReason ?? undefined}>
-                        Askıda
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline">Aktif</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {u.createdAt.toLocaleDateString("tr-TR", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell className="pr-4 text-right">
-                    <UserActions user={u} isSelf={u.id === me.id} />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
 
-        {pageCount > 1 && (
-          <div className="flex items-center justify-between border-t p-4 text-sm text-muted-foreground">
-            <span>
-              Sayfa {page} / {pageCount}
-            </span>
-            <div className="flex gap-2">
-              <PageLink href={page > 1 ? pageHref(page - 1) : null}>Önceki</PageLink>
-              <PageLink href={page < pageCount ? pageHref(page + 1) : null}>Sonraki</PageLink>
-            </div>
-          </div>
-        )}
+        <section className="space-y-4 rounded-2xl border bg-card p-6 lg:col-span-2">
+          <SectionHeader title="Son duyurular" href="/admin/announcements" />
+          {latestAnnouncements.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">Henüz duyuru yok.</p>
+          ) : (
+            <ul className="space-y-4">
+              {latestAnnouncements.map((a) => (
+                <li key={a.id} className="space-y-1">
+                  <p className="font-medium leading-snug">{a.title}</p>
+                  <p className="line-clamp-2 text-sm text-muted-foreground">{a.content}</p>
+                  <p className="text-xs text-muted-foreground/80">
+                    {a.createdAt.toLocaleDateString("tr-TR", { day: "numeric", month: "long", timeZone: "Europe/Brussels" })}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
     </div>
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function StatCard({
+  href,
+  icon,
+  label,
+  value,
+  hint,
+}: {
+  href: string;
+  icon: IconSvgElement;
+  label: string;
+  value: number;
+  hint: string;
+}) {
   return (
-    <div className="rounded-xl border bg-card p-5 space-y-1">
-      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{label}</p>
-      <p className="text-2xl font-bold">{value}</p>
-    </div>
+    <Link href={href} className="group rounded-2xl border bg-card p-5 transition-shadow hover:shadow-md">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
+        <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <HugeiconsIcon icon={icon} strokeWidth={2} className="size-4.5" />
+        </div>
+      </div>
+      <p className="mt-2 text-3xl font-bold">{value}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
+    </Link>
   );
 }
 
-function PageLink({ href, children }: { href: string | null; children: React.ReactNode }) {
-  if (!href) {
-    return (
-      <Button variant="outline" size="sm" disabled>
-        {children}
-      </Button>
-    );
-  }
+function SectionHeader({ title, href }: { title: string; href: string }) {
   return (
-    <Button asChild variant="outline" size="sm">
-      <Link href={href}>{children}</Link>
-    </Button>
+    <div className="flex items-center justify-between">
+      <h2 className="font-bold">{title}</h2>
+      <Link href={href} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        Tümü
+        <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-4" />
+      </Link>
+    </div>
   );
 }
