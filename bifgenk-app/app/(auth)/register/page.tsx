@@ -9,14 +9,12 @@ import { Label } from "@/components/ui/label";
 
 export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSuccess(null);
 
     const formData = new FormData(e.currentTarget);
 
@@ -39,13 +37,8 @@ export default function RegisterPage() {
 
     if (result?.error) {
       setError(result.error);
+      setLoading(false);
     }
-
-    if (result?.success) {
-      setSuccess(result.success);
-    }
-
-    setLoading(false);
   }
 
   return (
@@ -144,97 +137,79 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {success ? (
-            <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-5 py-6 space-y-3">
-              <div className="flex items-center gap-2 text-emerald-700 font-semibold">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                  <polyline points="22 4 12 14.01 9 11.01" />
-                </svg>
-                Kayıt başarılı!
-              </div>
-              <p className="text-sm text-emerald-600">{success}</p>
-              <Link href="/login">
-                <Button variant="outline" className="w-full mt-2">
-                  Giriş sayfasına git
-                </Button>
-              </Link>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="fullName">Ad Soyad</Label>
+              <Input
+                id="fullName"
+                name="fullName"
+                type="text"
+                placeholder="Adın Soyadın"
+                required
+                autoComplete="name"
+                className="h-11"
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Ad Soyad</Label>
-                <Input
-                  id="fullName"
-                  name="fullName"
-                  type="text"
-                  placeholder="Adın Soyadın"
-                  required
-                  autoComplete="name"
-                  className="h-11"
-                />
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">E-posta</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="ornek@email.com"
-                  required
-                  autoComplete="email"
-                  className="h-11"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">E-posta</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="ornek@email.com"
+                required
+                autoComplete="email"
+                className="h-11"
+              />
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Şifre</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="En az 6 karakter"
-                  required
-                  autoComplete="new-password"
-                  className="h-11"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Şifre</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="En az 6 karakter"
+                required
+                autoComplete="new-password"
+                className="h-11"
+              />
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Şifre tekrar</Label>
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Şifreni tekrar gir"
-                  required
-                  autoComplete="new-password"
-                  className="h-11"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Şifre tekrar</Label>
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Şifreni tekrar gir"
+                required
+                autoComplete="new-password"
+                className="h-11"
+              />
+            </div>
 
-              {error && (
-                <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
-                  {error}
-                </div>
+            {error && (
+              <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+
+            <Button type="submit" className="w-full h-11 text-sm font-semibold" disabled={loading}>
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Hesap oluşturuluyor...
+                </span>
+              ) : (
+                "Hesap Oluştur"
               )}
-
-              <Button type="submit" className="w-full h-11 text-sm font-semibold" disabled={loading}>
-                {loading ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    Hesap oluşturuluyor...
-                  </span>
-                ) : (
-                  "Hesap Oluştur"
-                )}
-              </Button>
-            </form>
-          )}
+            </Button>
+          </form>
 
           <div className="text-center text-sm text-muted-foreground">
             Zaten hesabın var mı?{" "}
