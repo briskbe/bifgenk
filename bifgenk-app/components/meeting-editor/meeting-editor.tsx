@@ -2,14 +2,9 @@
 
 import { memo, useCallback } from "react";
 import "@blocknote/shadcn/style.css";
-import {
-  BlockNoteSchema,
-  createHeadingBlockSpec,
-  createPageBreakBlockSpec,
-  defaultBlockSpecs,
-  filterSuggestionItems,
-  type PartialBlock,
-} from "@blocknote/core";
+import "@liveblocks/react-ui/styles.css";
+import "@liveblocks/react-tiptap/styles.css";
+import { filterSuggestionItems, type BlockNoteEditor } from "@blocknote/core";
 import {
   SuggestionMenuController,
   getDefaultReactSlashMenuItems,
@@ -18,21 +13,13 @@ import {
   type DefaultReactSuggestionItem,
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
+import {
+  useIsEditorReady,
+  useLiveblocksExtension,
+  withLiveblocksEditorOptions,
+} from "@liveblocks/react-blocknote";
 import { tr } from "./dictionary-tr";
-
-// No file storage is set up, so upload-based media blocks are left out.
-// Images can still be embedded from a URL.
-const baseBlocks = Object.fromEntries(
-  Object.entries(defaultBlockSpecs).filter(([type]) => !["audio", "video", "file", "heading"].includes(type))
-) as Omit<typeof defaultBlockSpecs, "audio" | "video" | "file" | "heading">;
-
-const schema = BlockNoteSchema.create({
-  blockSpecs: {
-    ...baseBlocks,
-    heading: createHeadingBlockSpec({ levels: [1, 2, 3] }),
-    pageBreak: createPageBreakBlockSpec(),
-  },
-});
+import { meetingSchema } from "./schema";
 
 /**
  * The slash menu renders one heading per run of items with the same group, so
@@ -48,21 +35,28 @@ function groupContiguously(items: DefaultReactSuggestionItem[]) {
 }
 
 type MeetingEditorProps = {
-  initialContent: unknown[];
-  onChange: (content: unknown[]) => void;
+  /** Called with the full document on every change. `local` is false for edits from other people. */
+  onChange: (content: unknown[], local: boolean) => void;
 };
 
-// Memoized: the parent re-renders while saving, and re-rendering BlockNote
-// mid-typing (e.g. while the slash menu closes) can trigger update loops.
-const MeetingEditor = memo(function MeetingEditor({ initialContent, onChange }: MeetingEditorProps) {
-  const editor = useCreateBlockNote({
-    schema,
-    dictionary: tr,
-    initialContent: initialContent.length
-      ? (initialContent as PartialBlock<typeof schema.blockSchema>[])
-      : undefined,
-    tables: { splitCells: true, cellBackgroundColor: true, cellTextColor: true, headers: true },
-  });
+// Must be rendered inside a Liveblocks RoomProvider: the document lives in the
+// room and is synced live between everyone who has the meeting open.
+// Memoized: re-rendering BlockNote mid-typing (e.g. while the slash menu
+// closes) can trigger update loops.
+const MeetingEditor = memo(function MeetingEditor({ onChange }: MeetingEditorProps) {
+  const liveblocks = useLiveblocksExtension({ comments: false, mentions: false });
+  const editor = useCreateBlockNote(
+    withLiveblocksEditorOptions(
+      liveblocks,
+      {
+        schema: meetingSchema,
+        dictionary: tr,
+        tables: { splitCells: true, cellBackgroundColor: true, cellTextColor: true, headers: true },
+      },
+      { mentions: false }
+    )
+  );
+  const ready = useIsEditorReady();
 
   const getSlashMenuItems = useCallback(
     async (query: string) =>
@@ -76,19 +70,40 @@ const MeetingEditor = memo(function MeetingEditor({ initialContent, onChange }: 
     [editor]
   );
 
-  const handleChange = useCallback(() => onChange(editor.document), [editor, onChange]);
+  const handleChange = useCallback(
+    (changed: BlockNoteEditor<typeof meetingSchema.blockSchema>, context: { getChanges: () => { source: { type: string } }[] }) => {
+      const local = context.getChanges().some((change) => change.source.type !== "yjs-remote");
+      onChange(changed.document, local);
+    },
+    [onChange]
+  );
 
   return (
-    <BlockNoteView
-      editor={editor}
-      theme="light"
-      slashMenu={false}
-      onChange={handleChange}
-      className="meeting-editor"
-    >
-      <SuggestionMenuController triggerCharacter="/" getItems={getSlashMenuItems} />
-    </BlockNoteView>
+    <div className="relative">
+      {!ready && <EditorSkeleton />}
+      <div className={ready ? undefined : "invisible"}>
+        <BlockNoteView
+          editor={editor}
+          theme="light"
+          slashMenu={false}
+          onChange={handleChange as never}
+          className="meeting-editor"
+        >
+          <SuggestionMenuController triggerCharacter="/" getItems={getSlashMenuItems} />
+        </BlockNoteView>
+      </div>
+    </div>
   );
 });
+
+export function EditorSkeleton() {
+  return (
+    <div className="absolute inset-x-[54px] top-0 space-y-3 py-2" aria-hidden>
+      <div className="h-5 w-1/3 animate-pulse rounded bg-muted" />
+      <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
+      <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
+    </div>
+  );
+}
 
 export default MeetingEditor;

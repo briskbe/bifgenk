@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { meeting } from "@/lib/db/schema";
+import { deleteMeetingRoom } from "@/lib/liveblocks";
 import { isValidDate, isValidTime, meetingTemplate } from "@/lib/meetings";
 import { requireAdmin } from "@/lib/session";
 
@@ -92,6 +93,7 @@ export async function saveMeeting(
 export async function deleteMeeting(id: string): Promise<{ error: string } | { ok: true }> {
   await requireAdmin();
   await db.delete(meeting).where(eq(meeting.id, id));
+  await deleteMeetingRoom(id);
   revalidateMeetings();
   return { ok: true };
 }
