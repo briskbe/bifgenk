@@ -20,7 +20,7 @@ export default async function AdminAnnouncementsPage() {
     .orderBy(desc(announcement.createdAt));
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-6xl space-y-8">
       <div className="space-y-1">
         <h1 className="text-2xl font-bold tracking-tight">Duyurular</h1>
         <p className="text-sm text-muted-foreground">

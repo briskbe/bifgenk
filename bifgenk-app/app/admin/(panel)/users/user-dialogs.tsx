@@ -10,8 +10,8 @@ import {
   setUserPassword,
   setUserRole,
   unbanUser,
-} from "../actions";
-import { ActionDialog } from "./action-dialog";
+} from "../../actions";
+import { ActionDialog } from "../action-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
