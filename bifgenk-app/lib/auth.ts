@@ -1,4 +1,6 @@
+import bcrypt from "bcryptjs";
 import { betterAuth } from "better-auth";
+import { hashPassword, verifyPassword } from "better-auth/crypto";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
@@ -27,6 +29,13 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 6,
+    password: {
+      hash: hashPassword,
+      // Members imported from Supabase keep their bcrypt hashes ("$2a$...")
+      // so they can sign in with their existing passwords.
+      verify: ({ hash, password }) =>
+        hash.startsWith("$2") ? bcrypt.compare(password, hash) : verifyPassword({ hash, password }),
+    },
   },
   plugins: [
     admin({
