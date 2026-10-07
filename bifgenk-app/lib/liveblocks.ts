@@ -1,6 +1,7 @@
 import "server-only";
+import { BlockNoteEditor, type PartialBlock } from "@blocknote/core";
+import { blocksToYDoc } from "@blocknote/core/yjs";
 import { Liveblocks, LiveblocksError } from "@liveblocks/node";
-import { ServerBlockNoteEditor } from "@blocknote/server-util";
 import * as Y from "yjs";
 import { MEETING_DOC_FIELD, meetingSchema } from "@/components/meeting-editor/schema";
 
@@ -55,8 +56,13 @@ export async function ensureMeetingRoom(meetingId: string, content: unknown[]) {
   }
 
   if (content.length) {
-    const editor = ServerBlockNoteEditor.create({ schema: meetingSchema });
-    const doc = editor.blocksToYDoc(content as Parameters<typeof editor.blocksToYDoc>[0], MEETING_DOC_FIELD);
+    // A headless editor is enough to convert blocks to Yjs; no DOM needed.
+    const editor = BlockNoteEditor.create({ schema: meetingSchema });
+    const doc = blocksToYDoc(
+      editor,
+      content as PartialBlock<typeof meetingSchema.blockSchema>[],
+      MEETING_DOC_FIELD
+    );
     await liveblocks().sendYjsBinaryUpdate(roomId, Y.encodeStateAsUpdate(doc));
   }
   return roomId;
