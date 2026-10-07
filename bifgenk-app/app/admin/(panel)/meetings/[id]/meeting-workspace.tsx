@@ -4,6 +4,18 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { LiveObject } from "@liveblocks/client";
+import {
+  ClientSideSuspense,
+  LiveblocksProvider,
+  RoomProvider,
+  useErrorListener,
+  useMutation,
+  useOthers,
+  useSelf,
+  useStatus,
+  useStorage,
+} from "@liveblocks/react/suspense";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowLeft01Icon,
@@ -16,6 +28,7 @@ import {
   MoreHorizontalIcon,
   Pdf01Icon,
 } from "@hugeicons/core-free-icons";
+import type { MeetingDetails } from "@/liveblocks.config";
 import { deleteMeeting, saveMeeting } from "../actions";
 import { ActionDialog } from "../../action-dialog";
 import { Button } from "@/components/ui/button";
@@ -26,32 +39,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { formatMeetingDate } from "@/lib/meetings";
 import { cn } from "@/lib/utils";
 
 const MeetingEditor = dynamic(() => import("@/components/meeting-editor/meeting-editor"), {
   ssr: false,
-  loading: () => (
-    <div className="space-y-3 py-2" aria-hidden>
-      <div className="h-5 w-1/3 animate-pulse rounded bg-muted" />
-      <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
-      <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
-    </div>
-  ),
+  loading: () => <LoadingLines />,
 });
 
-type MeetingData = {
+type MeetingData = MeetingDetails & {
   id: string;
-  title: string;
-  date: string;
-  startTime: string;
-  location: string;
+  roomId: string;
   content: unknown[];
   updatedAt: string;
   updatedByName: string | null;
 };
-
-type Details = Pick<MeetingData, "title" | "date" | "startTime" | "location">;
 
 type SaveState =
   | { status: "saved"; at: string }
@@ -65,19 +68,54 @@ function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 }
 
+/**
+ * Meeting notes page. Everyone who has the meeting open edits the same live
+ * document through Liveblocks; each person's own edits are also saved to our
+ * database (for the list, overview and PDF export).
+ */
 export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
+  return (
+    <LiveblocksProvider authEndpoint="/api/liveblocks-auth" throttle={16}>
+      <RoomProvider
+        id={meeting.roomId}
+        initialPresence={{}}
+        initialStorage={{
+          details: new LiveObject({
+            title: meeting.title,
+            date: meeting.date,
+            startTime: meeting.startTime,
+            location: meeting.location,
+          }),
+        }}
+      >
+        <ClientSideSuspense fallback={<WorkspaceSkeleton />}>
+          <LiveMeeting meeting={meeting} />
+        </ClientSideSuspense>
+      </RoomProvider>
+    </LiveblocksProvider>
+  );
+}
+
+function LiveMeeting({ meeting }: { meeting: MeetingData }) {
   const router = useRouter();
-  const [details, setDetails] = useState<Details>({
-    title: meeting.title,
-    date: meeting.date,
-    startTime: meeting.startTime,
-    location: meeting.location,
-  });
+  const details = useStorage((root) => root.details);
   const [saveState, setSaveState] = useState<SaveState>({ status: "saved", at: meeting.updatedAt });
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+
+  useErrorListener((error) => {
+    if (error.context.type !== "ROOM_CONNECTION_ERROR") return;
+    setConnectionError(
+      // 4001: the auth endpoint refused (e.g. signed out or no longer an admin).
+      error.context.code === 4001
+        ? "Bu toplantıya bağlanma yetkin yok. Tekrar giriş yapmayı dene."
+        : "Canlı bağlantıda bir sorun oluştu. Sayfayı yenile."
+    );
+  });
 
   // Latest values live in refs so autosave always sends what's on screen.
   const detailsRef = useRef(details);
+  detailsRef.current = details;
   const contentRef = useRef<unknown[]>(meeting.content);
   const versionRef = useRef(0);
   const savedVersionRef = useRef(0);
@@ -94,7 +132,7 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
     setSaveState({ status: "saving" });
     const run = (async () => {
       try {
-        const result = await saveMeeting(meeting.id, detailsRef.current, contentRef.current);
+        const result = await saveMeeting(meeting.id, { ...detailsRef.current }, contentRef.current);
         if ("error" in result) {
           setSaveState({ status: "error", message: result.error });
           return false;
@@ -126,17 +164,24 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
     }, AUTOSAVE_DELAY);
   }, [save]);
 
-  function updateDetails(patch: Partial<Details>) {
-    const next = { ...detailsRef.current, ...patch };
-    detailsRef.current = next;
-    setDetails(next);
+  const updateDetails = useMutation(
+    ({ storage }, patch: Partial<MeetingDetails>) => {
+      storage.get("details").update(patch);
+    },
+    []
+  );
+
+  function editDetails(patch: Partial<MeetingDetails>) {
+    updateDetails(patch);
+    detailsRef.current = { ...detailsRef.current, ...patch };
     markDirty();
   }
 
   const handleContentChange = useCallback(
-    (content: unknown[]) => {
+    (content: unknown[], local: boolean) => {
       contentRef.current = content;
-      markDirty();
+      // Other people's edits are saved by their own browsers.
+      if (local) markDirty();
     },
     [markDirty]
   );
@@ -169,6 +214,8 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
   async function openPdf(download: boolean) {
     // Open the tab synchronously so pop-up blockers allow it, then point it at the PDF.
     const tab = download ? null : window.open("about:blank", "_blank");
+    // Always save first so the PDF includes everyone's latest edits.
+    versionRef.current += 1;
     const ok = await save();
     if (!ok) {
       tab?.close();
@@ -190,7 +237,8 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
           </Link>
         </Button>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-3">
+          <PresenceAvatars />
           <SaveIndicator state={saveState} />
           <Button
             variant="outline"
@@ -225,6 +273,12 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
         </div>
       </div>
 
+      {connectionError && (
+        <div className="rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {connectionError}
+        </div>
+      )}
+
       {/* Paper */}
       <article className="overflow-hidden rounded-3xl border bg-card shadow-sm">
         <div className="h-1.5 bg-primary" />
@@ -232,7 +286,7 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Toplantı notları</p>
           <textarea
             value={details.title}
-            onChange={(e) => updateDetails({ title: e.target.value.replace(/\n/g, " ") })}
+            onChange={(e) => editDetails({ title: e.target.value.replace(/\n/g, " ") })}
             placeholder="Adsız toplantı"
             rows={1}
             maxLength={200}
@@ -246,18 +300,16 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
                 type="date"
                 required
                 value={details.date}
-                onChange={(e) => updateDetails({ date: e.target.value })}
+                onChange={(e) => editDetails({ date: e.target.value })}
                 className="rounded-lg bg-transparent px-2 py-1 outline-none hover:bg-muted focus:bg-muted"
               />
-              {details.date && (
-                <span className="text-muted-foreground">{formatMeetingDate(details.date)}</span>
-              )}
+              {details.date && <span className="text-muted-foreground">{formatMeetingDate(details.date)}</span>}
             </PropertyRow>
             <PropertyRow icon={Clock01Icon} label="Saat">
               <input
                 type="time"
                 value={details.startTime}
-                onChange={(e) => updateDetails({ startTime: e.target.value })}
+                onChange={(e) => editDetails({ startTime: e.target.value })}
                 className="rounded-lg bg-transparent px-2 py-1 outline-none hover:bg-muted focus:bg-muted"
               />
             </PropertyRow>
@@ -265,7 +317,7 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
               <input
                 type="text"
                 value={details.location}
-                onChange={(e) => updateDetails({ location: e.target.value })}
+                onChange={(e) => editDetails({ location: e.target.value })}
                 placeholder="Boş"
                 className="w-full rounded-lg bg-transparent px-2 py-1 outline-none placeholder:text-muted-foreground/60 hover:bg-muted focus:bg-muted"
               />
@@ -275,8 +327,8 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
           <div className="my-6 border-t" />
 
           {/* BlockNote adds its own horizontal padding for the side menu; pull it back to align. */}
-          <div className="-mx-[54px] sm:-mx-[54px]">
-            <MeetingEditor initialContent={meeting.content} onChange={handleContentChange} />
+          <div className="-mx-[54px]">
+            <MeetingEditor onChange={handleContentChange} />
           </div>
         </div>
       </article>
@@ -284,7 +336,7 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
       <p className="text-center text-xs text-muted-foreground">
         Komutlar için <kbd className="rounded border bg-muted px-1">/</kbd> yaz · Biçimlendirmek için metni seç ·
         Kaydetmek için <kbd className="rounded border bg-muted px-1">Ctrl</kbd>+<kbd className="rounded border bg-muted px-1">S</kbd>
-        {meeting.updatedByName && <> · Son düzenleyen: {meeting.updatedByName}</>}
+        {meeting.updatedByName && <> · Son kaydeden: {meeting.updatedByName}</>}
       </p>
 
       <ActionDialog
@@ -304,6 +356,79 @@ export function MeetingWorkspace({ meeting }: { meeting: MeetingData }) {
           return result;
         }}
       />
+    </div>
+  );
+}
+
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+/** Avatars of everyone who has this meeting open, plus the live connection state. */
+function PresenceAvatars() {
+  const self = useSelf();
+  const others = useOthers();
+  const status = useStatus();
+  const visible = others.slice(0, 4);
+  const hidden = others.length - visible.length;
+  const live = status === "connected";
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex -space-x-2">
+        {visible.map((other) => (
+          <Tooltip key={other.connectionId}>
+            <TooltipTrigger asChild>
+              <span
+                className="flex size-8 items-center justify-center rounded-full border-2 border-background text-[11px] font-bold text-white"
+                style={{ backgroundColor: other.info.color }}
+              >
+                {initials(other.info.name)}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              {other.info.name}
+              {other.id === self.id && " (başka bir sekme)"}
+            </TooltipContent>
+          </Tooltip>
+        ))}
+        {hidden > 0 && (
+          <span className="flex size-8 items-center justify-center rounded-full border-2 border-background bg-muted text-[11px] font-semibold">
+            +{hidden}
+          </span>
+        )}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span
+              className="flex size-8 items-center justify-center rounded-full border-2 border-background text-[11px] font-bold text-white ring-2 ring-primary/30"
+              style={{ backgroundColor: self.info.color }}
+            >
+              {initials(self.info.name)}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>Sen ({self.info.name})</TooltipContent>
+        </Tooltip>
+      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span
+            className={cn("size-2 rounded-full", live ? "bg-primary" : "animate-pulse bg-amber-500")}
+            aria-label={live ? "Canlı bağlı" : "Bağlanıyor"}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          {live
+            ? others.length
+              ? `Canlı · ${others.length + 1} kişi düzenliyor`
+              : "Canlı · değişiklikler anında paylaşılır"
+            : "Bağlanıyor…"}
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 }
@@ -353,5 +478,33 @@ function SaveIndicator({ state }: { state: SaveState }) {
       {state.status === "dirty" && <span className="size-2 rounded-full bg-amber-500" />}
       {text}
     </span>
+  );
+}
+
+function LoadingLines() {
+  return (
+    <div className="space-y-3 px-[54px] py-2" aria-hidden>
+      <div className="h-5 w-1/3 animate-pulse rounded bg-muted" />
+      <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
+      <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
+    </div>
+  );
+}
+
+function WorkspaceSkeleton() {
+  return (
+    <div className="mx-auto max-w-4xl space-y-4" aria-busy>
+      <div className="h-8" />
+      <div className="overflow-hidden rounded-3xl border bg-card shadow-sm">
+        <div className="h-1.5 bg-primary" />
+        <div className="space-y-4 px-6 pb-16 pt-10 sm:px-14">
+          <div className="h-3 w-32 animate-pulse rounded bg-muted" />
+          <div className="h-9 w-2/3 animate-pulse rounded bg-muted" />
+          <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
+          <div className="h-4 w-1/4 animate-pulse rounded bg-muted" />
+          <p className="pt-4 text-sm text-muted-foreground">Canlı oturuma bağlanılıyor…</p>
+        </div>
+      </div>
+    </div>
   );
 }

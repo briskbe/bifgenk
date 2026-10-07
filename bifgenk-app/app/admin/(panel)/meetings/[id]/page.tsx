@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { meeting, user } from "@/lib/db/schema";
+import { ensureMeetingRoom } from "@/lib/liveblocks";
 import { requireAdmin } from "@/lib/session";
 import { MeetingWorkspace } from "./meeting-workspace";
 
@@ -17,17 +18,20 @@ export default async function MeetingPage({ params }: { params: Promise<{ id: st
 
   if (!found) notFound();
   const m = found.meeting;
+  const content = Array.isArray(m.content) ? m.content : [];
+  const roomId = await ensureMeetingRoom(m.id, content);
 
   return (
     <MeetingWorkspace
       key={m.id}
       meeting={{
         id: m.id,
+        roomId,
         title: m.title,
         date: m.date,
         startTime: m.startTime ?? "",
         location: m.location ?? "",
-        content: Array.isArray(m.content) ? m.content : [],
+        content,
         updatedAt: m.updatedAt.toISOString(),
         updatedByName: found.updatedByName,
       }}
