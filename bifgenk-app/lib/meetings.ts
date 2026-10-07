@@ -229,3 +229,23 @@ export function formatDateRange({ from, to }: { from?: string; to?: string }) {
   if (to) return `${formatMeetingDate(to, full)} ve öncesi`;
   return "Tüm tarihler";
 }
+
+export type MeetingFilters = {
+  q: string;
+  period?: MeetingPeriod;
+  from?: string;
+  to?: string;
+};
+
+/** URL for the meetings list with the given filters (empty values dropped). */
+export function meetingsHref(filters: MeetingFilters) {
+  const params = new URLSearchParams();
+  if (filters.q) params.set("q", filters.q);
+  if (filters.period) params.set("period", filters.period);
+  if (filters.period === "custom") {
+    if (filters.from) params.set("from", filters.from);
+    if (filters.to) params.set("to", filters.to);
+  }
+  const qs = params.toString();
+  return qs ? `/admin/meetings?${qs}` : "/admin/meetings";
+}

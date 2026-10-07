@@ -1,30 +1,24 @@
-import Link from "next/link";
+"use client";
+
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Calendar03Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MEETING_PERIODS, formatDateRange, type MeetingPeriod } from "@/lib/meetings";
+import {
+  MEETING_PERIODS,
+  formatDateRange,
+  isMeetingPeriod,
+  meetingsHref,
+  type MeetingFilters,
+  type MeetingPeriod,
+} from "@/lib/meetings";
 import { cn } from "@/lib/utils";
+import { useMeetingsNavigation } from "./meetings-navigation";
 
-export type MeetingFilters = {
-  q: string;
-  period?: MeetingPeriod;
-  from?: string;
-  to?: string;
-};
-
-/** URL for the meetings list with the given filters (empty values dropped). */
-export function meetingsHref(filters: MeetingFilters) {
-  const params = new URLSearchParams();
-  if (filters.q) params.set("q", filters.q);
-  if (filters.period) params.set("period", filters.period);
-  if (filters.period === "custom") {
-    if (filters.from) params.set("from", filters.from);
-    if (filters.to) params.set("to", filters.to);
-  }
-  const qs = params.toString();
-  return qs ? `/admin/meetings?${qs}` : "/admin/meetings";
+/** Plain left click without modifiers: handle in-app; otherwise let the browser open a tab etc. */
+function isPlainClick(e: React.MouseEvent) {
+  return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
 }
 
 export function PeriodFilter({
@@ -36,17 +30,39 @@ export function PeriodFilter({
   range: { from?: string; to?: string };
   count: number;
 }) {
+  const { href, navigate } = useMeetingsNavigation();
+  const optimisticParam = new URLSearchParams(href.split("?")[1] ?? "").get("period") ?? undefined;
+  const activePeriod: MeetingPeriod | undefined = isMeetingPeriod(optimisticParam) ? optimisticParam : undefined;
   const chips: { value?: MeetingPeriod; label: string }[] = [{ label: "Tümü" }, ...MEETING_PERIODS];
+
+  function submitCustom(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    navigate(
+      meetingsHref({
+        q: filters.q,
+        period: "custom",
+        from: (data.get("from") as string) || undefined,
+        to: (data.get("to") as string) || undefined,
+      })
+    );
+  }
 
   return (
     <div className="space-y-3">
       <nav aria-label="Tarih filtresi" className="flex flex-wrap gap-2">
         {chips.map((chip) => {
-          const active = filters.period === chip.value;
+          const active = activePeriod === chip.value;
+          const target = meetingsHref({ q: filters.q, period: chip.value, from: filters.from, to: filters.to });
           return (
-            <Link
+            <a
               key={chip.label}
-              href={meetingsHref({ q: filters.q, period: chip.value, from: filters.from, to: filters.to })}
+              href={target}
+              onClick={(e) => {
+                if (!isPlainClick(e)) return;
+                e.preventDefault();
+                navigate(target);
+              }}
               aria-current={active ? "page" : undefined}
               className={cn(
                 "rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors",
@@ -56,18 +72,17 @@ export function PeriodFilter({
               )}
             >
               {chip.label}
-            </Link>
+            </a>
           );
         })}
       </nav>
 
-      {filters.period === "custom" && (
+      {activePeriod === "custom" && (
         <form
           action="/admin/meetings"
+          onSubmit={submitCustom}
           className="flex flex-wrap items-end gap-3 rounded-2xl border bg-card p-4"
         >
-          <input type="hidden" name="period" value="custom" />
-          {filters.q && <input type="hidden" name="q" value={filters.q} />}
           <div className="space-y-1.5">
             <Label htmlFor="filter-from" className="text-xs text-muted-foreground">
               Başlangıç
@@ -93,5 +108,30 @@ export function PeriodFilter({
         </p>
       )}
     </div>
+  );
+}
+
+/** Search box that keeps the active date filter. */
+export function MeetingSearch({ filters }: { filters: MeetingFilters }) {
+  const { navigate } = useMeetingsNavigation();
+
+  function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const q = ((new FormData(e.currentTarget).get("q") as string) ?? "").trim();
+    navigate(meetingsHref({ ...filters, q }));
+  }
+
+  return (
+    <form className="flex gap-2" action="/admin/meetings" onSubmit={submit}>
+      <Input name="q" defaultValue={filters.q} placeholder="Başlık veya yer ara" className="h-10 max-w-sm bg-card" />
+      <Button type="submit" variant="outline">
+        Ara
+      </Button>
+      {filters.q && (
+        <Button variant="ghost" type="button" onClick={() => navigate(meetingsHref({ ...filters, q: "" }))}>
+          Temizle
+        </Button>
+      )}
+    </form>
   );
 }
