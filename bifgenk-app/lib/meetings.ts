@@ -152,3 +152,80 @@ export function meetingPdfFilename(meeting: { title: string; date: string }) {
   const slug = slugify(meeting.title);
   return `toplanti-${meeting.date}${slug ? `-${slug}` : ""}.pdf`;
 }
+
+// ── Period filters ─────────────────────────────────────────────────────────
+
+export const MEETING_PERIODS = [
+  { value: "week", label: "Bu hafta" },
+  { value: "month", label: "Bu ay" },
+  { value: "quarter", label: "Bu çeyrek" },
+  { value: "year", label: "Bu yıl" },
+  { value: "custom", label: "Özel aralık" },
+] as const;
+
+export type MeetingPeriod = (typeof MEETING_PERIODS)[number]["value"];
+
+export function isMeetingPeriod(value: string | undefined): value is MeetingPeriod {
+  return MEETING_PERIODS.some((p) => p.value === value);
+}
+
+function toISO(d: Date) {
+  return d.toISOString().slice(0, 10);
+}
+
+/**
+ * Inclusive date range for a period, relative to `today` (YYYY-MM-DD).
+ * Weeks run Monday–Sunday. Custom ranges may be open on either side.
+ */
+export function meetingPeriodRange(
+  period: MeetingPeriod,
+  today: string,
+  custom: { from?: string; to?: string } = {}
+): { from?: string; to?: string } {
+  const d = parseDate(today);
+  const y = d.getUTCFullYear();
+  const m = d.getUTCMonth();
+
+  switch (period) {
+    case "week": {
+      const mondayOffset = (d.getUTCDay() + 6) % 7;
+      const monday = new Date(Date.UTC(y, m, d.getUTCDate() - mondayOffset));
+      const sunday = new Date(Date.UTC(y, m, d.getUTCDate() - mondayOffset + 6));
+      return { from: toISO(monday), to: toISO(sunday) };
+    }
+    case "month":
+      return { from: toISO(new Date(Date.UTC(y, m, 1))), to: toISO(new Date(Date.UTC(y, m + 1, 0))) };
+    case "quarter": {
+      const start = Math.floor(m / 3) * 3;
+      return { from: toISO(new Date(Date.UTC(y, start, 1))), to: toISO(new Date(Date.UTC(y, start + 3, 0))) };
+    }
+    case "year":
+      return { from: `${y}-01-01`, to: `${y}-12-31` };
+    case "custom": {
+      let from = custom.from && isValidDate(custom.from) ? custom.from : undefined;
+      let to = custom.to && isValidDate(custom.to) ? custom.to : undefined;
+      if (from && to && from > to) [from, to] = [to, from];
+      return { from, to };
+    }
+  }
+}
+
+/** Human label for a range, e.g. "6 – 12 Ekim 2026" or "1 Oca – 31 Mar 2026". */
+export function formatDateRange({ from, to }: { from?: string; to?: string }) {
+  const full: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+  if (from && to) {
+    const a = parseDate(from);
+    const b = parseDate(to);
+    const sameYear = a.getUTCFullYear() === b.getUTCFullYear();
+    const sameMonth = sameYear && a.getUTCMonth() === b.getUTCMonth();
+    if (from === to) return formatMeetingDate(from, full);
+    if (sameMonth) return `${a.getUTCDate()} – ${formatMeetingDate(to, full)}`;
+    if (sameYear) {
+      return `${formatMeetingDate(from, { day: "numeric", month: "long" })} – ${formatMeetingDate(to, full)}`;
+    }
+    return `${formatMeetingDate(from, full)} – ${formatMeetingDate(to, full)}`;
+  }
+  if (from) return `${formatMeetingDate(from, full)} ve sonrası`;
+  if (to) return `${formatMeetingDate(to, full)} ve öncesi`;
+  return "Tüm tarihler";
+}

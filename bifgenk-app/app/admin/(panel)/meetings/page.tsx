@@ -1,29 +1,41 @@
 import Link from "next/link";
-import { and, asc, desc, gte, ilike, lt, or } from "drizzle-orm";
+import { and, asc, desc, gte, ilike, lt, lte, or } from "drizzle-orm";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Calendar03Icon, Clock01Icon, Location01Icon } from "@hugeicons/core-free-icons";
 import { db } from "@/lib/db";
 import { meeting, type Meeting } from "@/lib/db/schema";
-import { meetingDateParts, meetingExcerpt, todayISO } from "@/lib/meetings";
+import {
+  isMeetingPeriod,
+  meetingDateParts,
+  meetingExcerpt,
+  meetingPeriodRange,
+  todayISO,
+} from "@/lib/meetings";
 import { requireAdmin } from "@/lib/session";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MeetingRowActions } from "./meeting-row-actions";
 import { NewMeetingButton } from "./new-meeting-button";
+import { PeriodFilter, meetingsHref, type MeetingFilters } from "./period-filter";
 
 export default async function MeetingsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; period?: string; from?: string; to?: string }>;
 }) {
   await requireAdmin();
-  const { q = "" } = await searchParams;
-  const query = q.trim();
+  const params = await searchParams;
+  const query = (params.q ?? "").trim();
+  const period = isMeetingPeriod(params.period) ? params.period : undefined;
   const today = todayISO();
+  const range = period ? meetingPeriodRange(period, today, { from: params.from, to: params.to }) : {};
+  const filters: MeetingFilters = { q: query, period, from: range.from, to: range.to };
 
-  const search = query
-    ? or(ilike(meeting.title, `%${query}%`), ilike(meeting.location, `%${query}%`))
-    : undefined;
+  const search = and(
+    query ? or(ilike(meeting.title, `%${query}%`), ilike(meeting.location, `%${query}%`)) : undefined,
+    range.from ? gte(meeting.date, range.from) : undefined,
+    range.to ? lte(meeting.date, range.to) : undefined
+  );
 
   const [upcoming, past] = await Promise.all([
     db
@@ -39,6 +51,7 @@ export default async function MeetingsPage({
   ]);
 
   const isEmpty = upcoming.length === 0 && past.length === 0;
+  const isFiltered = Boolean(query || period);
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -53,6 +66,10 @@ export default async function MeetingsPage({
       </div>
 
       <form className="flex gap-2" action="/admin/meetings">
+        {/* Keep the date filter when searching. */}
+        {period && <input type="hidden" name="period" value={period} />}
+        {period === "custom" && range.from && <input type="hidden" name="from" value={range.from} />}
+        {period === "custom" && range.to && <input type="hidden" name="to" value={range.to} />}
         <Input
           name="q"
           defaultValue={query}
@@ -64,10 +81,12 @@ export default async function MeetingsPage({
         </Button>
         {query && (
           <Button asChild variant="ghost">
-            <Link href="/admin/meetings">Temizle</Link>
+            <Link href={meetingsHref({ ...filters, q: "" })}>Temizle</Link>
           </Button>
         )}
       </form>
+
+      <PeriodFilter filters={filters} range={range} count={upcoming.length + past.length} />
 
       {isEmpty ? (
         <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed bg-card px-6 py-16 text-center">
@@ -75,14 +94,22 @@ export default async function MeetingsPage({
             <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-7" />
           </div>
           <div className="space-y-1">
-            <h2 className="font-semibold">{query ? "Aramanla eşleşen toplantı yok" : "Henüz toplantı yok"}</h2>
+            <h2 className="font-semibold">
+              {query ? "Aramanla eşleşen toplantı yok" : period ? "Bu dönemde toplantı yok" : "Henüz toplantı yok"}
+            </h2>
             <p className="text-sm text-muted-foreground">
-              {query
-                ? "Farklı bir arama dene."
+              {isFiltered
+                ? "Farklı bir arama veya tarih aralığı dene."
                 : "İlk toplantını oluştur ve notlarını Notion tarzı editörde yaz."}
             </p>
           </div>
-          {!query && <NewMeetingButton />}
+          {isFiltered ? (
+            <Button asChild variant="outline">
+              <Link href="/admin/meetings">Filtreleri temizle</Link>
+            </Button>
+          ) : (
+            <NewMeetingButton />
+          )}
         </div>
       ) : (
         <>
